@@ -325,6 +325,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 205168b9830e0c9409280ef64d4b3c44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 5
+  jumpForce: 5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.3
 --- !u!136 &382825033
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -526,7 +533,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e23e246af5f5fd046bd1cf020d1904f3, type: 2}
+  - {fileID: 2100000, guid: e0baf75a68e457644b34886de1dd1be4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
