@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 3249358734883418121}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.642656, y: -1.3019888, z: -2.1821227}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -48,10 +48,10 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 6824232442121852025}
-    PlayerPrefab: {fileID: 7290567163873145326, guid: e7aa025f75f324f4cbc76739cc2b0f04, type: 3}
+    PlayerPrefab: {fileID: 7290567163873145326, guid: 66f3ca4ee836a3548bc2f0b967fbd7d3, type: 3}
     Prefabs:
       NetworkPrefabsLists:
-      - {fileID: 11400000, guid: f1f8ca6246a7cd34cac8ab10fdab65f7, type: 2}
+      - {fileID: 11400000, guid: 319a6faa7ff1dc646a32ba6319378acc, type: 2}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
@@ -69,7 +69,7 @@ MonoBehaviour:
     EnableNetworkLogs: 1
     OldPrefabList: []
   RunInBackground: 1
-  LogLevel: 0
+  LogLevel: 1
 --- !u!114 &6824232442121852025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,12 +85,12 @@ MonoBehaviour:
   m_ProtocolType: 0
   m_MaxPacketQueueSize: 128
   m_MaxPayloadSize: 6144
-  m_HeartbeatTimeoutMS: 148
+  m_HeartbeatTimeoutMS: 500
   m_ConnectTimeoutMS: 1000
   m_MaxConnectAttempts: 60
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
-    Address: 192.168.0.14
+    Address: 127.0.0.1
     Port: 7777
     ServerListenAddress: 0.0.0.0
   DebugSimulator:

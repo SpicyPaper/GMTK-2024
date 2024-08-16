@@ -251,7 +251,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4683955025271251685}
-  - component: {fileID: 521295344657940332}
+  - component: {fileID: 5282226812931960470}
   m_Layer: 5
   m_Name: NetworkManagerUI
   m_TagString: Untagged
@@ -281,7 +281,7 @@ RectTransform:
   m_AnchoredPosition: {x: -100, y: -25}
   m_SizeDelta: {x: 450, y: 266}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &521295344657940332
+--- !u!114 &5282226812931960470
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -290,12 +290,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7295942568896415889}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32ac973c2ab71b841b5ae18b97abcf46, type: 3}
+  m_Script: {fileID: 11500000, guid: 688277b6e00e59547b42b64d1618119d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   serverBtn: {fileID: 835607241727420709}
   clientBtn: {fileID: 6744632056037238192}
-  hostBtn: {fileID: 835607241727420709}
+  hostBtn: {fileID: 1386673694736327244}
 --- !u!1 &7359816371996238356
 GameObject:
   m_ObjectHideFlags: 0
