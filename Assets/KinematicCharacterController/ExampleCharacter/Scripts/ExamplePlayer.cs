@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using KinematicCharacterController;
 using KinematicCharacterController.Examples;
+using Unity.Netcode;
 
 namespace KinematicCharacterController.Examples
 {
-    public class ExamplePlayer : MonoBehaviour
+    public class ExamplePlayer : NetworkBehaviour
     {
         public ExampleCharacterController Character;
         public ExampleCharacterCamera CharacterCamera;
@@ -19,7 +20,7 @@ namespace KinematicCharacterController.Examples
 
         private void Start()
         {
-            Cursor.lockState = CursorLockMode.Locked;
+            // Cursor.lockState = CursorLockMode.Locked;
 
             // Tell camera to follow transform
             CharacterCamera.SetFollowTransform(Character.CameraFollowPoint);
@@ -27,13 +28,26 @@ namespace KinematicCharacterController.Examples
             // Ignore the character's collider(s) for camera obstruction checks
             CharacterCamera.IgnoredColliders.Clear();
             CharacterCamera.IgnoredColliders.AddRange(Character.GetComponentsInChildren<Collider>());
+            
+            if (IsOwner)
+            {
+                GameManager.Instance.SetPlayerCamera(CharacterCamera.Camera);
+            }
         }
+       
+
+        
 
         private void Update()
         {
+            if (!IsOwner)
+            {
+                return;
+            }
+
             if (Input.GetMouseButtonDown(0))
             {
-                Cursor.lockState = CursorLockMode.Locked;
+                //Cursor.lockState = CursorLockMode.Locked;
             }
 
             HandleCharacterInput();
@@ -61,7 +75,7 @@ namespace KinematicCharacterController.Examples
             // Prevent moving the camera while the cursor isn't locked
             if (Cursor.lockState != CursorLockMode.Locked)
             {
-                lookInputVector = Vector3.zero;
+                // lookInputVector = Vector3.zero;
             }
 
             // Input for zooming the camera (disabled in WebGL because it can cause problems)

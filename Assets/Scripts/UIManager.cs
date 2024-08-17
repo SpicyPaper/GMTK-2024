@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
 
     public Button killButton;
     public Button respawnButton;
+    public Text objectDescription;
 
     void Awake()
     {

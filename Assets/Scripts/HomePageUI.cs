@@ -29,9 +29,31 @@ public class HomePageUI : MonoBehaviour
     public TMP_InputField playerNameInputField;
     public Canvas mainCanvas;
     public Canvas debugCanvas;
+    public static HomePageUI Instance;
 
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            createGameButton.onClick.AddListener(OnCreateGameClicked);
+            joinGameButton.onClick.AddListener(OnJoinGameClicked);
+            confirmJoinButton.onClick.AddListener(OnConfirmJoinClicked);
+            backToHomeButton.onClick.AddListener(OnBackToHomeClicked);
+            playGameButton.onClick.AddListener(PlayGame);
+            StopButton.onClick.AddListener(StopRelay);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     async void Start()
     {
+
+
+
         // Ensure the canvas is visible at the start
         mainCanvas.gameObject.SetActive(true);
         debugCanvas.gameObject.SetActive(false);
@@ -42,12 +64,7 @@ public class HomePageUI : MonoBehaviour
 
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
-        createGameButton.onClick.AddListener(OnCreateGameClicked);
-        joinGameButton.onClick.AddListener(OnJoinGameClicked);
-        confirmJoinButton.onClick.AddListener(OnConfirmJoinClicked);
-        backToHomeButton.onClick.AddListener(OnBackToHomeClicked);
-        playGameButton.onClick.AddListener(PlayGame);
-        StopButton.onClick.AddListener(StopRelay);
+
 
     }
 
@@ -108,12 +125,17 @@ public class HomePageUI : MonoBehaviour
         //hostGameCodeInputField.readOnly = false;
         hostGameCodeInputField.text = joinCode;
         //hostGameCodeInputField.readOnly = true;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+
     }
 
     private async Task<bool> JoinRelay(string joinCode)
     {
         bool connected = await StartClientWithRelay(joinCode);
-
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         return connected;
     }
 
@@ -138,15 +160,17 @@ public class HomePageUI : MonoBehaviour
     }
 
     
-    void PlayGame()
+    public void PlayGame()
     {
+        Debug.Log("ININININ");
         mainCanvas.gameObject.SetActive(false);
         debugCanvas.gameObject.SetActive(true);
         joinGamePopup.SetActive(false);
         CreateGamePopup.SetActive(false);
         //debugCanvas.GetComponent<SpawnManager>().Initialize();
         GameManager.Instance.InitHost();
-        // Spawn the player
+        GameManager.Instance.SwapCamera();
+
     }
 
     void StopRelay()

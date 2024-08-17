@@ -1,4 +1,3 @@
-using UnityEditor.SceneTemplate;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,10 +7,13 @@ public class PropHighlight : MonoBehaviour
     public float raycastDistance = 100f;
     public float outlineWidth = 100f;
     public Color outlineColor = Color.red;
-    public Text text;
+    private Text text;
 
     private GameObject currentHighlightedObject;
-
+    void Start()
+    {
+        text = UIManager.Instance.objectDescription;
+    }
     void Update()
     {
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, raycastDistance))

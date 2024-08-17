@@ -14,7 +14,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/LobbyScene.unity
     guid: c765470b08126374eb4a92b78bb7dc98
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/EGO.unity
     guid: 15d198bfc57622347bc8b0df0f53d59b
+  - enabled: 1
+    path: Assets/Scenes/Ego 2.unity
+    guid: 46a11971b652ff447ba62fd4c6894392
   m_configObjects: {}
