@@ -8,7 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Network.unity
     guid: 67af9d2796c81454f957ad376c768ae2
+  - enabled: 0
+    path: Assets/Scenes/HomePage.unity
+    guid: 3a1e582bdd1898447915032a3030de16
+  - enabled: 0
+    path: Assets/LobbyScene.unity
+    guid: c765470b08126374eb4a92b78bb7dc98
   - enabled: 1
-    path: Assets/Scenes/Etienne Scene.unity
-    guid: c418db82ef9e5024a80bfc36ca93b2e4
+    path: Assets/Scenes/EGO.unity
+    guid: 15d198bfc57622347bc8b0df0f53d59b
   m_configObjects: {}
