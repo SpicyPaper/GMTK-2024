@@ -755,11 +755,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: eb7776c0-dcbc-47f3-991f-5aaa85340b36
+  cloudProjectId: 06a31716-165e-433a-92fb-40e1e3447e05
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: GMTK24
-  organizationId: unity_v7h1otuo9km2pw
+  projectName: GMTK-2024
+  organizationId: akawohlfahrt
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

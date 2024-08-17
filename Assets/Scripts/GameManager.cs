@@ -111,8 +111,10 @@ public class GameManager : NetworkBehaviour
 
     public void SwapCamera()
     {
-            Debug.Log("Swapping camera");
-            mainCamera.enabled = !mainCamera.enabled;
-           playerCamera.enabled = !playerCamera.enabled;
+        Debug.Log("Swapping camera");
+        mainCamera.enabled = !mainCamera.enabled;
+        playerCamera.enabled = !playerCamera.enabled;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 }

@@ -51,9 +51,6 @@ public class HomePageUI : MonoBehaviour
     }
     async void Start()
     {
-
-
-
         // Ensure the canvas is visible at the start
         mainCanvas.gameObject.SetActive(true);
         debugCanvas.gameObject.SetActive(false);
@@ -63,9 +60,6 @@ public class HomePageUI : MonoBehaviour
         await UnityServices.InitializeAsync();
 
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
-
-
-
     }
 
     void OnCreateGameClicked()
@@ -99,13 +93,11 @@ public class HomePageUI : MonoBehaviour
 
             }
             bool connected = await JoinRelay(gameCode);
-
-            if (connected)
-            {
-                PlayGame();
-            }
-
-            }
+            //if (connected)
+            //{
+            //    PlayGame();
+            //}
+        }
         else
         {
             Debug.Log("Game code is empty!");
@@ -158,7 +150,6 @@ public class HomePageUI : MonoBehaviour
 
         return !string.IsNullOrEmpty(joinCode) && NetworkManager.Singleton.StartClient();
     }
-
     
     public void PlayGame()
     {
@@ -170,13 +161,10 @@ public class HomePageUI : MonoBehaviour
         //debugCanvas.GetComponent<SpawnManager>().Initialize();
         GameManager.Instance.InitHost();
         GameManager.Instance.SwapCamera();
-
     }
 
     void StopRelay()
     {
         // Should stop the relay server ,disconnecting all clients and go back the main menu
     }
-
-
 }

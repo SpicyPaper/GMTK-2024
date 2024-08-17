@@ -11,6 +11,7 @@ namespace KinematicCharacterController.Examples
     {
         public ExampleCharacterController Character;
         public ExampleCharacterCamera CharacterCamera;
+        public List<MonoBehaviour> gameOjs;
 
         private const string MouseXInput = "Mouse X";
         private const string MouseYInput = "Mouse Y";
@@ -32,11 +33,19 @@ namespace KinematicCharacterController.Examples
             if (IsOwner)
             {
                 GameManager.Instance.SetPlayerCamera(CharacterCamera.Camera);
+                if (!IsHost)
+                {
+                    HomePageUI.Instance.PlayGame();
+                }
+            }
+            else
+            {
+                foreach (MonoBehaviour item in gameOjs)
+                {
+                    item.enabled = false;
+                }
             }
         }
-       
-
-        
 
         private void Update()
         {
