@@ -7,7 +7,7 @@ public class GameManager : NetworkBehaviour
     public static GameManager Instance;
     public Transform[] spawnPoints; // Array of spawn points in the scene
 
-    private List<PlayerController> players = new List<PlayerController>(); // List to track all players
+    private List<PlayerInteraction> players = new List<PlayerInteraction>(); // List to track all players
 
     void Awake()
     {
@@ -35,18 +35,18 @@ public class GameManager : NetworkBehaviour
         base.OnNetworkSpawn();
 
         // Register the player to the GameManager when they spawn
-        PlayerController.OnPlayerSpawned += RegisterPlayer;
-        PlayerController.OnPlayerDespawned += UnregisterPlayer;
+        PlayerInteraction.OnPlayerSpawned += RegisterPlayer;
+        PlayerInteraction.OnPlayerDespawned += UnregisterPlayer;
     }
 
     void OnDestroy()
     {
         // Unregister the event handlers to avoid memory leaks
-        PlayerController.OnPlayerSpawned -= RegisterPlayer;
-        PlayerController.OnPlayerDespawned -= UnregisterPlayer;
+        PlayerInteraction.OnPlayerSpawned -= RegisterPlayer;
+        PlayerInteraction.OnPlayerDespawned -= UnregisterPlayer;
     }
 
-    private void RegisterPlayer(PlayerController player)
+    private void RegisterPlayer(PlayerInteraction player)
     {
         if (!players.Contains(player))
         {
@@ -54,7 +54,7 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-    private void UnregisterPlayer(PlayerController player)
+    private void UnregisterPlayer(PlayerInteraction player)
     {
         if (players.Contains(player))
         {
