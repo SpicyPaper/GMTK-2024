@@ -15,16 +15,17 @@ public class CameraOpenDoor : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		RaycastHit hit;
-		if (Physics.Raycast (transform.position, transform.forward, out hit, DistanceOpen)) {
-				if (hit.transform.GetComponent<DoorScript.Door> ()) {
-				text.SetActive (true);
+        Debug.DrawRay(transform.position, transform.forward, Color.green);
+        if (Physics.Raycast (transform.position, transform.forward, out hit, DistanceOpen)) {
+			if (hit.transform.GetComponent<DoorScript.Door> ()) {
+				//text.SetActive (true);
 				if (Input.GetKeyDown(KeyCode.E))
 					hit.transform.GetComponent<DoorScript.Door> ().OpenDoor();
 			}else{
-				text.SetActive (false);
+				//text.SetActive (false);
 			}
 		}else{
-			text.SetActive (false);
+			//text.SetActive (false);
 		}
 	}
 }
