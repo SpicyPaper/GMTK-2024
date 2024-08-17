@@ -8,6 +8,7 @@ public class Morphing : MonoBehaviour
     [SerializeField] private Transform playerTransform;
     [SerializeField] private LayerMask propLayerMask;
     [SerializeField] private GameObject initialGameObject;
+    [SerializeField] private List<GameObject> meshObjects;
     [SerializeField] private float playerHeight = 2f;
 
     private bool isMorphed = false;
@@ -19,10 +20,9 @@ public class Morphing : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        initialRenderer = initialGameObject.GetComponent<Renderer>();
+        //initialRenderer = initialGameObject.GetComponent<Renderer>();
         initialCollider = initialGameObject.GetComponent<Collider>();
         localScale = initialGameObject.transform.localScale;
-
     }
 
     // Update is called once per frame
@@ -56,8 +56,11 @@ public class Morphing : MonoBehaviour
 
     private void ChangeAppearanceAndTransform(GameObject propObject)
     {
-        GetComponent<Renderer>().enabled = false;
-        GetComponent<Collider>().enabled = false;
+        foreach (GameObject item in meshObjects)
+        {
+            item.GetComponent<Renderer>().enabled = false;
+        }
+        //GetComponent<Collider>().enabled = false;
 
         GameObject ninst = Instantiate(propObject);
 
@@ -68,8 +71,10 @@ public class Morphing : MonoBehaviour
 
     private void ChangeAppearanceAndUntransform(GameObject propObject)
     {
-
-        GetComponent<Renderer>().enabled = true;
-        GetComponent<Collider>().enabled = true;
+        foreach (GameObject item in meshObjects)
+        {
+            item.GetComponent<Renderer>().enabled = true;
+        }
+        //GetComponent<Collider>().enabled = true;
     }
 }

@@ -575,6 +575,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20ff6c4dd1b3ec14c95f6c81fba10416, type: 3}
+--- !u!1 &248609805 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8081095513693834053, guid: 7a609c5e578620e48a7deb3e8bca4a90, type: 3}
+  m_PrefabInstance: {fileID: 925530196}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &449854206 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4651603642805868, guid: 20ff6c4dd1b3ec14c95f6c81fba10416, type: 3}
@@ -853,6 +858,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 314a67329e024b64cb503e36002b64fe, type: 3}
+--- !u!1 &507156261 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8081479993734096317, guid: 7a609c5e578620e48a7deb3e8bca4a90, type: 3}
+  m_PrefabInstance: {fileID: 925530196}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &574267066 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4651603642805868, guid: 20ff6c4dd1b3ec14c95f6c81fba10416, type: 3}
@@ -1725,7 +1735,7 @@ PrefabInstance:
       addedObject: {fileID: 1681910601}
     - targetCorrespondingSourceObject: {fileID: 8081452804692021515, guid: 7a609c5e578620e48a7deb3e8bca4a90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1681910606}
+      addedObject: {fileID: 1681910611}
     - targetCorrespondingSourceObject: {fileID: 8080997220377364945, guid: 7a609c5e578620e48a7deb3e8bca4a90, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1976409344}
@@ -3656,7 +3666,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8084675601215593753, guid: 7a609c5e578620e48a7deb3e8bca4a90, type: 3}
   m_PrefabInstance: {fileID: 925530196}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1681910606
+--- !u!114 &1681910611
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3673,6 +3683,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   initialGameObject: {fileID: 1681910595}
+  meshObjects:
+  - {fileID: 507156261}
+  - {fileID: 248609805}
   playerHeight: 2
 --- !u!4 &1752807289 stripped
 Transform:
