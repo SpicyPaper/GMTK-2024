@@ -6,32 +6,36 @@ using UnityEngine;
 
 public class ObjectGrabbable : MonoBehaviour
 {
-    private Transform objectGrabPointTransform;
+    private Transform cameraTransform;
+    private Transform rootPlayerTransform;
     private Rigidbody objectRigidbody;
-    private float distanceBeforeDrop = 5f;
-    private float effectivePickupDistance;
+    private Vector3 effectivePickupDistance;
+    private Quaternion initRot;
 
     private void Awake()
     {
+        cameraTransform = Camera.main.transform;
         objectRigidbody = GetComponent<Rigidbody>();
         objectRigidbody.useGravity = true;
     }
 
-    public void Grab(Transform objectGrabPointTransform)
+    public void Grab(Transform rootPlayerTransform)
     {
-        this.objectGrabPointTransform = objectGrabPointTransform;
+        this.rootPlayerTransform = rootPlayerTransform;
+        initRot = rootPlayerTransform.localRotation;
 
         objectRigidbody.useGravity = false;
         objectRigidbody.velocity = Vector3.zero;
 
         objectRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
-        effectivePickupDistance = Vector3.Distance(objectRigidbody.position, objectGrabPointTransform.position);
+        effectivePickupDistance = objectRigidbody.position -
+            rootPlayerTransform.position;
     }
 
     public void Drop()
     {
-        objectGrabPointTransform = null;
+        rootPlayerTransform = null;
         objectRigidbody.useGravity = true;
 
         objectRigidbody.constraints = RigidbodyConstraints.None;
@@ -39,24 +43,39 @@ public class ObjectGrabbable : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // TODO Do something with the effectivePickupDistance to keep the distance with which the object has been picked up and keep the distance between object and grab point as this distance
-        if (objectGrabPointTransform != null)
+        if (rootPlayerTransform != null)
         {
-            Vector3 directionToGrabPoint = (objectGrabPointTransform.position - transform.position).normalized;
+            // Calculate the target position for the object
+            Vector3 targetPos = rootPlayerTransform.position +
+                cameraTransform.forward * effectivePickupDistance.magnitude + Vector3.up * 2;
 
-            float moveSpeed = 5000f;
-            objectRigidbody.AddForce(directionToGrabPoint * moveSpeed * Time.deltaTime);
+            // Maintain the object's initial rotation relative to the player
+            Quaternion relativeRotation = rootPlayerTransform.rotation * Quaternion.Inverse(initRot);
+            objectRigidbody.transform.rotation = relativeRotation * initRot;
 
-            float maxSpeed = 20f;
-            if (objectRigidbody.velocity.magnitude > maxSpeed)
+            // Stop any existing velocity
+            objectRigidbody.velocity = Vector3.zero;
+
+            // Move the object towards the target position
+            if ((transform.position - targetPos).magnitude < 0.2f)
             {
-                objectRigidbody.velocity = objectRigidbody.velocity.normalized * maxSpeed;
+                transform.position = targetPos;
+            }
+            else
+            {
+                Vector3 directionToGrabPoint = targetPos - transform.position;
+
+                float moveSpeed = 50000f;
+                objectRigidbody.AddForce(moveSpeed * directionToGrabPoint * Time.deltaTime);
             }
 
-            if (Vector3.Distance(objectRigidbody.position, objectGrabPointTransform.position) > distanceBeforeDrop)
+            // Drop the object if it exceeds a certain distance from the player
+            if (Vector3.Distance(objectRigidbody.position, rootPlayerTransform.position) >
+                effectivePickupDistance.magnitude + 2f)
             {
                 Drop();
             }
         }
     }
+
 }

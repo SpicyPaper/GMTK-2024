@@ -30,9 +30,11 @@ public class PlayerPickUpDrop : MonoBehaviour
                 Vector3 capsuleStart = playerTransform.position;
                 Vector3 capsuleEnd = playerTransform.position + Vector3.up * (playerHeight - 0.5f);
 
-                Debug.DrawRay(playerTransform.position, playerTransform.forward * pickUpDistance, Color.red, 1f);
+                Debug.DrawRay(playerTransform.position, playerTransform.forward * pickUpDistance,
+                    Color.red, 1f);
 
-                if (Physics.CapsuleCast(capsuleStart, capsuleEnd, 0.5f, playerTransform.forward, out RaycastHit raycastHit, pickUpDistance, pickUpLayerMask))
+                if (Physics.CapsuleCast(capsuleStart, capsuleEnd, 0.5f, playerTransform.forward,
+                    out RaycastHit raycastHit, pickUpDistance, pickUpLayerMask))
                 {                    
                     if (raycastHit.transform.TryGetComponent(out ObjectGrabbable objectGrababble))
                     {
