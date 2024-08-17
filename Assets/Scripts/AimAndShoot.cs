@@ -11,7 +11,7 @@ public class aimAndShoot : MonoBehaviour
 
     void Update()
     {
-        AimWithMouse();
+        //AimWithMouse();
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -35,9 +35,16 @@ public class aimAndShoot : MonoBehaviour
 
     void Shoot()
     {
-        // Obtenir la direction du tir depuis le joueur
+        // Obtenir la position d'origine du raycast (au niveau du joueur)
         Vector3 rayOrigin = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
-        Vector3 rayDirection = (playerCamera.ScreenPointToRay(Input.mousePosition).direction).normalized;
+
+        // Obtenir la direction du tir en fonction de la position de la souris sur l'écran
+        Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
+        Vector3 rayDirection = new Vector3(ray.direction.x * -1,
+            ray.direction.y * 1, ray.direction.z * -1).normalized;
+
+        // Debugging pour voir la direction du ray
+        Debug.Log("Direction du ray: " + rayDirection);
 
         // Lancer le raycast
         RaycastHit hit;
@@ -62,6 +69,7 @@ public class aimAndShoot : MonoBehaviour
             StartCoroutine(DrawRay(rayOrigin, rayOrigin + rayDirection * rayDistance));
         }
     }
+
 
     IEnumerator DrawRay(Vector3 start, Vector3 end)
     {

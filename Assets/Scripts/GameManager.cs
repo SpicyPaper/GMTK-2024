@@ -12,7 +12,6 @@ public class GameManager : NetworkBehaviour
 
     private List<PlayerInteraction> players = new List<PlayerInteraction>(); // List to track all players
 
-
     void Awake()
     {
         if (Instance == null)

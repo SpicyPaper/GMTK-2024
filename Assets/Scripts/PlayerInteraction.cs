@@ -6,6 +6,7 @@ public class PlayerInteraction : NetworkBehaviour
 {
     public GameObject characterModel;
     public Transform spawnPoint; // Reference to the spawn point where the player should respawn
+    public float pv = 100;
 
     public static event Action<PlayerInteraction> OnPlayerSpawned;
     public static event Action<PlayerInteraction> OnPlayerDespawned;
@@ -73,5 +74,24 @@ public class PlayerInteraction : NetworkBehaviour
     {
         // This method allows the GameManager to set the spawn point for this player
         spawnPoint = newSpawnPoint;
+    }
+
+    [ServerRpc]
+    public void HitPlayerServerRpc(ulong clientId)
+    {
+        ClientIdHittedClientRpC(clientId);
+    }
+
+    [ClientRpc]
+    private void ClientIdHittedClientRpC(ulong clientId)
+    {
+        if (GetComponent<NetworkObject>().OwnerClientId == clientId) {
+            pv -= 20;
+
+            if (pv <= 0)
+            {
+                KillCharacterServerRpc();
+            }
+        }
     }
 }
