@@ -6,8 +6,12 @@ public class GameManager : NetworkBehaviour
 {
     public static GameManager Instance;
     public Transform[] spawnPoints; // Array of spawn points in the scene
+    // Reference to the main camera in the scene
+    public Camera mainCamera;
+    private Camera playerCamera;
 
     private List<PlayerInteraction> players = new List<PlayerInteraction>(); // List to track all players
+
 
     void Awake()
     {
@@ -21,6 +25,25 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+    public void Update()
+    {
+        // If the player presses the "C" key, unlock the cursor
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        // P key
+        if ( Input.GetKeyDown(KeyCode.P))
+        {
+            HomePageUI.Instance.PlayGame();
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            SwapCamera();
+        }
+    }
+
     public void InitHost()
     {
         if (IsHost)
@@ -28,6 +51,11 @@ public class GameManager : NetworkBehaviour
             Debug.Log("Assigning the button !");
             UIManager.Instance.respawnButton.onClick.AddListener(StartNewRound);
         }
+    }
+
+    public void SetPlayerCamera(Camera camera)
+    {
+        playerCamera = camera;
     }
 
     public override void OnNetworkSpawn()
@@ -79,5 +107,12 @@ public class GameManager : NetworkBehaviour
             players[i].SetSpawnPoint(assignedSpawnPoint);
             players[i].Respawn();
         }
+    }
+
+    public void SwapCamera()
+    {
+            Debug.Log("Swapping camera");
+            mainCamera.enabled = !mainCamera.enabled;
+           playerCamera.enabled = !playerCamera.enabled;
     }
 }
