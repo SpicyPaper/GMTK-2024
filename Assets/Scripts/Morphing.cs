@@ -8,21 +8,15 @@ public class Morphing : MonoBehaviour
     [SerializeField] private Transform playerTransform;
     [SerializeField] private LayerMask propLayerMask;
     [SerializeField] private GameObject initialGameObject;
+    [SerializeField] private GameObject meshParent;
     [SerializeField] private List<GameObject> meshObjects;
     [SerializeField] private float playerHeight = 2f;
 
     private bool isMorphed = false;
 
-    private Renderer initialRenderer;
-    private Collider initialCollider;
-    private Vector3 localScale;
-
     // Start is called before the first frame update
     void Start()
     {
-        //initialRenderer = initialGameObject.GetComponent<Renderer>();
-        initialCollider = initialGameObject.GetComponent<Collider>();
-        localScale = initialGameObject.transform.localScale;
     }
 
     // Update is called once per frame
@@ -36,7 +30,8 @@ public class Morphing : MonoBehaviour
                 Vector3 capsuleStart = playerTransform.position;
                 Vector3 capsuleEnd = playerTransform.position + Vector3.up * (playerHeight - 0.5f);
 
-                if (Physics.CapsuleCast(capsuleStart, capsuleEnd, 0.5f, playerTransform.forward, out RaycastHit hit, raycastDistance, propLayerMask))
+                if (Physics.CapsuleCast(capsuleStart, capsuleEnd, 0.5f, playerTransform.forward,
+                    out RaycastHit hit, raycastDistance, propLayerMask))
                 {
                     if (hit.collider.CompareTag("Prop"))
                     {
@@ -50,7 +45,6 @@ public class Morphing : MonoBehaviour
                 ChangeAppearanceAndUntransform(this.gameObject);
                 isMorphed = false;
             }
-
         }
     }
 
@@ -60,11 +54,11 @@ public class Morphing : MonoBehaviour
         {
             item.GetComponent<Renderer>().enabled = false;
         }
-        //GetComponent<Collider>().enabled = false;
-
         GameObject ninst = Instantiate(propObject);
+        ninst.GetComponent<Collider>().enabled = false;
+        ninst.GetComponent<Rigidbody>().isKinematic = true;
 
-        ninst.transform.SetParent(transform);
+        ninst.transform.SetParent(meshParent.transform);
         ninst.transform.localPosition = Vector3.zero;
         ninst.transform.localScale = propObject.transform.localScale;
     }
