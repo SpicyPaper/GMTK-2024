@@ -1,39 +1,81 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class ObjectGrabbable : MonoBehaviour
 {
-
+    private Transform cameraTransform;
+    private Transform rootPlayerTransform;
     private Rigidbody objectRigidbody;
-    private Transform objectGrabPointTransform;
+    private Vector3 effectivePickupDistance;
+    private Quaternion initRot;
 
     private void Awake()
     {
+        cameraTransform = Camera.main.transform;
         objectRigidbody = GetComponent<Rigidbody>();
+        objectRigidbody.useGravity = true;
     }
 
-    public void Grab(Transform objectGrabPointTransform)
+    public void Grab(Transform rootPlayerTransform)
     {
-        this.objectGrabPointTransform = objectGrabPointTransform;
+        this.rootPlayerTransform = rootPlayerTransform;
+        initRot = rootPlayerTransform.localRotation;
+
         objectRigidbody.useGravity = false;
+        objectRigidbody.velocity = Vector3.zero;
+
+        objectRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+
+        effectivePickupDistance = objectRigidbody.position -
+            rootPlayerTransform.position;
     }
 
     public void Drop()
     {
-        this.objectGrabPointTransform = null;
+        rootPlayerTransform = null;
         objectRigidbody.useGravity = true;
+
+        objectRigidbody.constraints = RigidbodyConstraints.None;
     }
 
-    // TODO change so the object grabbed is not in the head of the player and jittery. But in a distance --> let it drop at a certain distance if it is stuck
     private void FixedUpdate()
     {
-        if (objectGrabPointTransform != null)
+        if (rootPlayerTransform != null)
         {
-            float lerpSpeed = 10f;
-            Vector3 newPosition = Vector3.Lerp(transform.position, objectGrabPointTransform.position, Time.deltaTime * lerpSpeed);
-            objectRigidbody.MovePosition(objectGrabPointTransform.position);
+            // Calculate the target position for the object
+            Vector3 targetPos = rootPlayerTransform.position +
+                cameraTransform.forward * effectivePickupDistance.magnitude + Vector3.up * 2;
+
+            // Maintain the object's initial rotation relative to the player
+            Quaternion relativeRotation = rootPlayerTransform.rotation * Quaternion.Inverse(initRot);
+            objectRigidbody.transform.rotation = relativeRotation * initRot;
+
+            // Stop any existing velocity
+            objectRigidbody.velocity = Vector3.zero;
+
+            // Move the object towards the target position
+            if ((transform.position - targetPos).magnitude < 0.2f)
+            {
+                transform.position = targetPos;
+            }
+            else
+            {
+                Vector3 directionToGrabPoint = targetPos - transform.position;
+
+                float moveSpeed = 50000f;
+                objectRigidbody.AddForce(moveSpeed * directionToGrabPoint * Time.deltaTime);
+            }
+
+            // Drop the object if it exceeds a certain distance from the player
+            if (Vector3.Distance(objectRigidbody.position, rootPlayerTransform.position) >
+                effectivePickupDistance.magnitude + 2f)
+            {
+                Drop();
+            }
         }
     }
+
 }

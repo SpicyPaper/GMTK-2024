@@ -8,6 +8,7 @@ public class PlayerPickUpDrop : MonoBehaviour
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform objectGrabPoint;
     [SerializeField] private LayerMask pickUpLayerMask;
+    [SerializeField] private float playerHeight = 2f;
 
 
     private ObjectGrabbable currentlyHeldObject;
@@ -24,17 +25,19 @@ public class PlayerPickUpDrop : MonoBehaviour
         {
             if (currentlyHeldObject == null)
             {
-                Debug.Log("before pickup");
                 float pickUpDistance = 5f;
-                Debug.DrawRay(playerTransform.position, playerTransform.forward * pickUpDistance, Color.red, 1f);
 
-                // TODO check if we need to move the rayasting so that le player could grap stuff at other height
-                if (Physics.Raycast(playerTransform.position, playerTransform.forward, out RaycastHit raycastHit, pickUpDistance, pickUpLayerMask))
+                Vector3 capsuleStart = playerTransform.position;
+                Vector3 capsuleEnd = playerTransform.position + Vector3.up * (playerHeight - 0.5f);
+
+                Debug.DrawRay(playerTransform.position, playerTransform.forward * pickUpDistance,
+                    Color.red, 1f);
+
+                if (Physics.CapsuleCast(capsuleStart, capsuleEnd, 0.5f, playerTransform.forward,
+                    out RaycastHit raycastHit, pickUpDistance, pickUpLayerMask))
                 {                    
-                    Debug.Log("starting to pickup");
                     if (raycastHit.transform.TryGetComponent(out ObjectGrabbable objectGrababble))
                     {
-                        Debug.Log(raycastHit.transform);
                         objectGrababble.Grab(objectGrabPoint);
                         currentlyHeldObject = objectGrababble;
                     }
