@@ -1,39 +1,62 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class ObjectGrabbable : MonoBehaviour
 {
-
-    private Rigidbody objectRigidbody;
     private Transform objectGrabPointTransform;
+    private Rigidbody objectRigidbody;
+    private float distanceBeforeDrop = 5f;
+    private float effectivePickupDistance;
 
     private void Awake()
     {
         objectRigidbody = GetComponent<Rigidbody>();
+        objectRigidbody.useGravity = true;
     }
 
     public void Grab(Transform objectGrabPointTransform)
     {
         this.objectGrabPointTransform = objectGrabPointTransform;
+
         objectRigidbody.useGravity = false;
+        objectRigidbody.velocity = Vector3.zero;
+
+        objectRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+
+        effectivePickupDistance = Vector3.Distance(objectRigidbody.position, objectGrabPointTransform.position);
     }
 
     public void Drop()
     {
-        this.objectGrabPointTransform = null;
+        objectGrabPointTransform = null;
         objectRigidbody.useGravity = true;
+
+        objectRigidbody.constraints = RigidbodyConstraints.None;
     }
 
-    // TODO change so the object grabbed is not in the head of the player and jittery. But in a distance --> let it drop at a certain distance if it is stuck
     private void FixedUpdate()
     {
+        // TODO Do something with the effectivePickupDistance to keep the distance with which the object has been picked up and keep the distance between object and grab point as this distance
         if (objectGrabPointTransform != null)
         {
-            float lerpSpeed = 10f;
-            Vector3 newPosition = Vector3.Lerp(transform.position, objectGrabPointTransform.position, Time.deltaTime * lerpSpeed);
-            objectRigidbody.MovePosition(objectGrabPointTransform.position);
+            Vector3 directionToGrabPoint = (objectGrabPointTransform.position - transform.position).normalized;
+
+            float moveSpeed = 5000f;
+            objectRigidbody.AddForce(directionToGrabPoint * moveSpeed * Time.deltaTime);
+
+            float maxSpeed = 20f;
+            if (objectRigidbody.velocity.magnitude > maxSpeed)
+            {
+                objectRigidbody.velocity = objectRigidbody.velocity.normalized * maxSpeed;
+            }
+
+            if (Vector3.Distance(objectRigidbody.position, objectGrabPointTransform.position) > distanceBeforeDrop)
+            {
+                Drop();
+            }
         }
     }
 }
