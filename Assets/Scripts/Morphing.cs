@@ -1,3 +1,4 @@
+using KinematicCharacterController;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
@@ -9,10 +10,10 @@ public class Morphing : MonoBehaviour
     [SerializeField] private LayerMask propLayerMask;
     [SerializeField] private GameObject initialGameObject;
     [SerializeField] private GameObject meshParent;
-    [SerializeField] private List<GameObject> meshObjects;
     [SerializeField] private float playerHeight = 2f;
 
     private bool isMorphed = false;
+    private GameObject newInst;
 
     // Start is called before the first frame update
     void Start()
@@ -50,25 +51,56 @@ public class Morphing : MonoBehaviour
 
     private void ChangeAppearanceAndTransform(GameObject propObject)
     {
-        foreach (GameObject item in meshObjects)
-        {
-            item.GetComponent<Renderer>().enabled = false;
-        }
-        GameObject ninst = Instantiate(propObject);
-        ninst.GetComponent<Collider>().enabled = false;
-        ninst.GetComponent<Rigidbody>().isKinematic = true;
+        ChangeRendererVisibility(meshParent, false);
+        newInst = Instantiate(propObject);
+        DisableColliders(newInst);
 
-        ninst.transform.SetParent(meshParent.transform);
-        ninst.transform.localPosition = Vector3.zero;
-        ninst.transform.localScale = propObject.transform.localScale;
+        if (newInst.GetComponent<Rigidbody>())
+        {
+            newInst.GetComponent<Rigidbody>().isKinematic = true;
+        }
+
+        BoxCollider newCollider = newInst.GetComponent<BoxCollider>();
+        playerTransform.GetComponent<KinematicCharacterMotor>()
+            .SetCapsuleDimensions(newCollider.size.y/4, newCollider.size.y, newCollider.size.y / 4);
+        Debug.Log(newCollider.size);
+
+        newInst.transform.SetParent(meshParent.transform);
+        newInst.transform.localPosition =
+            new Vector3(0, -newCollider.center.y/2, 0);
+        newInst.transform.localScale = propObject.transform.localScale;
     }
 
     private void ChangeAppearanceAndUntransform(GameObject propObject)
     {
-        foreach (GameObject item in meshObjects)
+        ChangeRendererVisibility(meshParent, true);
+        meshParent.GetComponent<KinematicCharacterMotor>()
+            .SetCapsuleDimensions(0.5f, 2, 1);
+
+        Destroy(newInst);
+    }
+
+    private void DisableColliders(GameObject target)
+    {
+        // Get all colliders in the GameObject and its children
+        Collider[] colliders = target.GetComponentsInChildren<Collider>();
+
+        // Loop through each collider and disable it
+        foreach (Collider col in colliders)
         {
-            item.GetComponent<Renderer>().enabled = true;
+            col.enabled = false;
         }
-        //GetComponent<Collider>().enabled = true;
+    }
+
+    private void ChangeRendererVisibility(GameObject target, bool enabled)
+    {
+        // Get all colliders in the GameObject and its children
+        Renderer[] renderers = target.GetComponentsInChildren<Renderer>();
+
+        // Loop through each collider and disable it
+        foreach (Renderer col in renderers)
+        {
+            col.enabled = enabled;
+        }
     }
 }
