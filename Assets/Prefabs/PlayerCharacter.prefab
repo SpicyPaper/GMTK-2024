@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 639970177505199833}
   - component: {fileID: 611051754375510317}
   - component: {fileID: 634675165742975915}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -156,7 +156,7 @@ GameObject:
   - component: {fileID: 7900620663573404234}
   - component: {fileID: 5991752234493099771}
   - component: {fileID: 214656258747031066}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerCharacter
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -281,11 +281,14 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 04d772d13586c5240b4eae23936598e5, type: 3}
   - {fileID: 8300000, guid: 4f97eee901041d44e82a62264b697a80, type: 3}
   shootingNoise: {fileID: 8300000, guid: 4310474905e266640852f43bd609a1a4, type: 3}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
   playerHeight: 2
   shootRaycastDistance: 100
   morphRaycastDistance: 5
   grabRaycastDistance: 5
-  highlightRaycastDistance: 5
+  highlightRaycastDistance: 50
   hightlightPropWidth: 10
   hightlightPropColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &7977278655379702420
@@ -469,7 +472,7 @@ GameObject:
   - component: {fileID: 5979763650564088921}
   - component: {fileID: 2162315262380651809}
   - component: {fileID: 7191653297088813598}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: PointerCanevas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -569,7 +572,7 @@ GameObject:
   m_Component:
   - component: {fileID: 648442884034953182}
   - component: {fileID: 6072550049701438504}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player Audio Source
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -698,7 +701,7 @@ GameObject:
   - component: {fileID: 5887867903149729658}
   - component: {fileID: 5667835694616377176}
   - component: {fileID: 1760128508095598029}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Pointer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -771,7 +774,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8083319385312309361}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Meshes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -803,7 +806,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8080564706898499775}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -837,7 +840,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8084855360501426981}
   - component: {fileID: 2197944139337372513}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Grab point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -884,7 +887,7 @@ GameObject:
   - component: {fileID: 8082836582067053581}
   - component: {fileID: 8094741113756287711}
   - component: {fileID: 8101976148705373239}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -967,7 +970,7 @@ GameObject:
   - component: {fileID: 8084670546333504757}
   - component: {fileID: 8094141053087213589}
   - component: {fileID: 8102325867609098153}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
