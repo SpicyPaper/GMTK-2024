@@ -26,11 +26,9 @@ public class CheckType : MonoBehaviour
             UpdateCameraDistance();
         }
 
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             HomePageUI.Instance.ChangeType();
-
-            // TODO Kill the player
         }
     }
 

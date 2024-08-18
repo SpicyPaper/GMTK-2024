@@ -16,9 +16,12 @@ using Unity.Services.Relay.Models;
 
 public class HomePageUI : MonoBehaviour
 {
+    public GameObject startPopUp;
     public GameObject joinGamePopup;
     public GameObject chooseTypePopUp;
     public GameObject CreateGamePopup;
+    public Button startGameButton;
+    public Button resetGameButton;
     public Button createGameButton;
     public Button joinGameButton;
     public Button playGameButton;
@@ -31,7 +34,6 @@ public class HomePageUI : MonoBehaviour
     public TMP_InputField hostGameCodeInputField;
     public TMP_InputField playerNameInputField;
     public Canvas mainCanvas;
-    public Canvas debugCanvas;
     public static HomePageUI Instance;
     public enum Type
     {
@@ -39,6 +41,8 @@ public class HomePageUI : MonoBehaviour
         Morph
     }
     public Type type;
+
+    private bool isCameraSwapped = false;
 
 
     void Awake()
@@ -60,14 +64,15 @@ public class HomePageUI : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     async void Start()
     {
         // Ensure the canvas is visible at the start
         mainCanvas.gameObject.SetActive(true);
-        debugCanvas.gameObject.SetActive(false);
         CreateGamePopup.SetActive(false); // Hide the popup at start
         joinGamePopup.SetActive(false); // Hide the popup at start
         chooseTypePopUp.gameObject.SetActive(false); // Hide the popup at start
+        startPopUp.SetActive(true);
 
         await UnityServices.InitializeAsync();
 
@@ -80,12 +85,14 @@ public class HomePageUI : MonoBehaviour
         StartRelay();
         PlayerPrefs.SetString("PlayerName", playerNameInputField.text);
         CreateGamePopup.SetActive(true);
+        startPopUp.SetActive(false);
         // Hide playerNameInputField
         playerNameInputField.gameObject.SetActive(false);
     }
 
     void OnJoinGameClicked()
     {
+        startPopUp.SetActive(false);
         joinGamePopup.SetActive(true);
         playerNameInputField.gameObject.SetActive(false);
     }
@@ -114,6 +121,7 @@ public class HomePageUI : MonoBehaviour
 
     void OnBackToHomeClicked()
     {
+        startPopUp.SetActive(true);
         joinGamePopup.SetActive(false);
     }
 
@@ -180,20 +188,25 @@ public class HomePageUI : MonoBehaviour
         createGameButton.gameObject.SetActive(false);
         CreateGamePopup.SetActive(false);
         joinGamePopup.SetActive(false);
+        startPopUp.SetActive(false);
         chooseTypePopUp.SetActive(true);
     }
-    
+
     public void PlayGame()
     {
         Debug.Log("ININININ");
         mainCanvas.gameObject.SetActive(false);
-        debugCanvas.gameObject.SetActive(true);
         chooseTypePopUp.SetActive(false);
         joinGamePopup.SetActive(false);
+        startPopUp.SetActive(false);
         CreateGamePopup.SetActive(false);
         //debugCanvas.GetComponent<SpawnManager>().Initialize();
-        GameManager.Instance.InitHost();
-        GameManager.Instance.SwapCamera();
+        GameManager.Instance.HandleGameButtons(startGameButton, resetGameButton);
+        if (!isCameraSwapped)
+        {
+            isCameraSwapped = true;
+            GameManager.Instance.SwapCamera();
+        }
     }
 
     void StopRelay()
@@ -204,9 +217,9 @@ public class HomePageUI : MonoBehaviour
     public void ChangeType()
     {
         mainCanvas.gameObject.SetActive(true);
-        debugCanvas.gameObject.SetActive(false);
         CreateGamePopup.SetActive(false); // Hide the popup at start
         joinGamePopup.SetActive(false); // Hide the popup at start
+        startPopUp.SetActive(false);
         chooseTypePopUp.gameObject.SetActive(false); // Hide the popup at start
 
         Cursor.lockState = CursorLockMode.None;
