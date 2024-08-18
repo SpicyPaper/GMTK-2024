@@ -155,7 +155,6 @@ GameObject:
   - component: {fileID: 6527334380957611528}
   - component: {fileID: 7900620663573404234}
   - component: {fileID: 5991752234493099771}
-  - component: {fileID: 4649466453538250473}
   - component: {fileID: 214656258747031066}
   m_Layer: 0
   m_Name: PlayerCharacter
@@ -367,9 +366,6 @@ MonoBehaviour:
     m_InternalValue: 0
   SpawnPoint:
     m_InternalValue: {x: 0, y: 0, z: 0}
-  gameOjs:
-  - {fileID: 7977278655379702420}
-  - {fileID: 6404020664104087420}
 --- !u!114 &6527334380957611528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -435,23 +431,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4649466453538250473
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4950844714296102715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2bf7338b6f661a9459365788fdfee74c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cam: {fileID: 656505081858125775}
-  maxDistance: 100
-  hitLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!114 &214656258747031066
 MonoBehaviour:
   m_ObjectHideFlags: 0
