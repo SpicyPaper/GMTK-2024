@@ -12,6 +12,7 @@ namespace KinematicCharacterController.Examples
         public ExampleCharacterController Character;
         public ExampleCharacterCamera CharacterCamera;
         public List<MonoBehaviour> gameOjs;
+        public AudioListener audioListener;
 
         private const string MouseXInput = "Mouse X";
         private const string MouseYInput = "Mouse Y";
@@ -37,6 +38,7 @@ namespace KinematicCharacterController.Examples
                 {
                     HomePageUI.Instance.PlayGame();
                 }
+
             }
             else
             {
@@ -44,6 +46,7 @@ namespace KinematicCharacterController.Examples
                 {
                     item.enabled = false;
                 }
+                audioListener.enabled = false;
             }
         }
 

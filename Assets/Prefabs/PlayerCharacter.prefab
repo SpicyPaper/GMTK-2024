@@ -360,11 +360,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d008aeba7bbb8a4eb5a8f516b1fa2f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterModel: {fileID: 4950844714296102715}
-  spawnPoint: {fileID: 0}
   maxHealth: 100
   CurrentHealth:
     m_InternalValue: 0
+  SpawnPoint:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  gameOjs:
+  - {fileID: 7977278655379702420}
+  - {fileID: 6404020664104087420}
 --- !u!114 &6527334380957611528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384,6 +387,7 @@ MonoBehaviour:
   - {fileID: 6404020664104087420}
   - {fileID: 392540067062199298}
   - {fileID: 9016940167125703988}
+  audioListener: {fileID: 611051754375510317}
 --- !u!114 &7900620663573404234
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,11 +3,11 @@ using Unity.Netcode;
 using UnityEngine;
 using static UnityEngine.Rendering.VirtualTexturing.Debugging;
 using UnityEngine.XR;
+using System.Collections.Generic;
+using KinematicCharacterController.Examples;
 
 public class PlayerInteraction : NetworkBehaviour
 {
-    public GameObject characterModel;
-    public Transform spawnPoint; // Reference to the spawn point where the player should respawn
     public int maxHealth = 100;
 
     public static event Action<PlayerInteraction> OnPlayerSpawned;
@@ -15,6 +15,7 @@ public class PlayerInteraction : NetworkBehaviour
 
     // Network variable to track the player's current health across the network
     public NetworkVariable<int> CurrentHealth = new NetworkVariable<int>();
+    public NetworkVariable<Vector3> SpawnPoint = new NetworkVariable<Vector3>(Vector3.zero);
 
     void Start()
     {
@@ -49,7 +50,7 @@ public class PlayerInteraction : NetworkBehaviour
     public void KillCharacterClientRpc()
     {
         // This method is called on all clients, and hides the character's model
-        characterModel.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public void KillCharacter()
@@ -61,32 +62,13 @@ public class PlayerInteraction : NetworkBehaviour
         }
     }
 
-    [ClientRpc]
-    public void RespawnClientRpc(Vector3 position)
-    {
-        // Set the character's position and make it visible again
-        transform.position = position;
-        characterModel.SetActive(true);
-    }
-
     public void Respawn()
     {
-        Debug.Log("Starting respawn");
-        if (IsServer)
-        {
-            // Set the respawn position to the spawn point (or any other logic you want)
-            Vector3 respawnPosition = spawnPoint != null ? spawnPoint.position : Vector3.zero;
-
-            // Notify all clients to respawn this player
-            RespawnClientRpc(respawnPosition);
-            CurrentHealth.Value = maxHealth;
-        }
-    }
-
-    public void SetSpawnPoint(Transform newSpawnPoint)
-    {
-        // This method allows the GameManager to set the spawn point for this player
-        spawnPoint = newSpawnPoint;
+        gameObject.SetActive(true);
+        // Set the character's position and make it visible again
+        var ecc = gameObject.GetComponent<ExampleCharacterController>();
+        ecc.Motor.SetPositionAndRotation(SpawnPoint.Value, transform.rotation);
+        CurrentHealth.Value = maxHealth;
     }
 
     // ServerRpc method to apply damage to the player
@@ -116,6 +98,6 @@ public class PlayerInteraction : NetworkBehaviour
     private void DieClientRpc()
     {
         // Hide or disable the character model to simulate death
-        characterModel.SetActive(false);
+        gameObject.SetActive(false);
     }
 }

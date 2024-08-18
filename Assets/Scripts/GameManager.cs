@@ -33,7 +33,7 @@ public class GameManager : NetworkBehaviour
             Cursor.visible = true;
         }
         // P key
-        if ( Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.P))
         {
             HomePageUI.Instance.PlayGame();
         }
@@ -102,8 +102,21 @@ public class GameManager : NetworkBehaviour
     {
         for (int i = 0; i < players.Count; i++)
         {
-            Transform assignedSpawnPoint = spawnPoints[i % spawnPoints.Length]; // Assign spawn point in a round-robin fashion
-            players[i].SetSpawnPoint(assignedSpawnPoint);
+            int rand = Random.Range(0, spawnPoints.Length);
+
+            Vector3 pos = spawnPoints[rand].position; // Assign spawn point in a round-robin fashion
+            players[i].SpawnPoint.Value = pos;
+        }
+        RespawnClientRpc();
+    }
+
+    [ClientRpc]
+    public void RespawnClientRpc()
+    {
+        Debug.Log("Starting respawn");
+
+        for (int i = 0; i < players.Count; i++)
+        {
             players[i].Respawn();
         }
     }
