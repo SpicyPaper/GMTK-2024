@@ -382,8 +382,10 @@ MonoBehaviour:
   gameOjs:
   - {fileID: 7977278655379702420}
   - {fileID: 6404020664104087420}
-  - {fileID: 392540067062199298}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 9016940167125703988}
+  - {fileID: 0}
 --- !u!114 &7900620663573404234
 MonoBehaviour:
   m_ObjectHideFlags: 0

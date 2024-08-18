@@ -10,10 +10,14 @@ public class Prop : MonoBehaviour
     private Vector3 effectivePickupDistance;
     private Quaternion initRot;
 
-    private void Awake()
+    private void Start()
     {
         cameraTransform = Camera.main.transform;
-        objectRigidbody = gameObject.AddComponent<Rigidbody>();
+        objectRigidbody = gameObject.GetComponent<Rigidbody>();
+        if (!objectRigidbody)
+        {
+            objectRigidbody = gameObject.AddComponent<Rigidbody>();
+        }
         objectRigidbody.useGravity = true;
     }
 
