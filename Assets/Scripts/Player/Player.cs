@@ -1,4 +1,5 @@
 using KinematicCharacterController;
+using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,7 +20,7 @@ public class Player : NetworkBehaviour
     [SerializeField] private float hightlightPropWidth = 100f;
     [SerializeField] private Color hightlightPropColor = Color.red;
 
-    private GameObject newInst;
+    private GameObject propCopyObject;
     private GameObject currentHighlightedObject;
     private Prop currentlyHeldObject;
     private Text propGrabedText;
@@ -53,34 +54,67 @@ public class Player : NetworkBehaviour
         if (Physics.CapsuleCast(transform.position, capsuleEnd, 0.5f, transform.forward,
             out RaycastHit hit, morphRaycastDistance))
         {
-            if (hit.collider.gameObject.GetComponent<Prop>())
+            GameObject propObject = GetParentWithProp(hit.transform.gameObject);
+            if (propObject)
             {
-                ChangeAppearanceAndTransform(hit.collider.gameObject);
+                ChangeAppearanceAndTransform(propObject);
             }
         }
+    }
+
+    private GameObject GetParentWithProp(GameObject obj)
+    {
+        Transform currentParent = obj.transform;
+        while (currentParent != null)
+        {
+            if (currentParent.GetComponent<Prop>())
+            {
+                return currentParent.gameObject;
+            }
+
+            currentParent = currentParent.parent;
+        }
+
+        return null;
     }
 
     private void ChangeAppearanceAndTransform(GameObject propObject)
     {
         ChangeRendererVisibility(meshParent, false);
-        newInst = Instantiate(propObject);
-        DisableColliders(newInst);
 
-        if (newInst.GetComponent<Rigidbody>())
+        propCopyObject = Instantiate(propObject);
+        DisableColliders(propCopyObject);
+
+        if (propCopyObject.GetComponent<Rigidbody>())
         {
-            newInst.GetComponent<Rigidbody>().isKinematic = true;
+            propCopyObject.GetComponent<Rigidbody>().isKinematic = true;
         }
 
-        BoxCollider newCollider = newInst.GetComponent<BoxCollider>();
-        transform.GetComponent<KinematicCharacterMotor>()
-            .SetCapsuleDimensions(newCollider.size.y / 4, newCollider.size.y, newCollider.size.y / 4);
+        Debug.LogWarning(propObject.name);
+        if (propObject.TryGetComponent(out Prop prop))
+        {
+            Bounds computedBounds = prop.ComputeBounds();
 
-        newInst.transform.SetParent(meshParent.transform);
-        newInst.transform.SetLocalPositionAndRotation(
-            new Vector3(0, -newCollider.center.y / 2, 0), 
-            Quaternion.Euler(Vector3.zero)
-        );
-        newInst.transform.localScale = propObject.transform.localScale;
+            float height = computedBounds.size.y;
+            float radius = Mathf.Min(Mathf.Min(computedBounds.size.x, computedBounds.size.z) / 2f, height / 2f);
+            float yOffset = computedBounds.center.y - transform.position.y;
+
+            transform.GetComponent<KinematicCharacterMotor>()
+                .SetCapsuleDimensions(radius, height, yOffset);
+
+            foreach (Transform child in meshParent.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            propCopyObject.transform.SetParent(meshParent.transform);
+            propCopyObject.transform.SetLocalPositionAndRotation(
+                new Vector3(0, 0, 0),
+                Quaternion.Euler(Vector3.zero)
+            );
+
+            propCopyObject.transform.localScale = propObject.transform.localScale;
+        }
     }
 
     private void DisableColliders(GameObject target)
