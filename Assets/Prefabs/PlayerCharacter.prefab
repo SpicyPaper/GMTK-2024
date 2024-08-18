@@ -147,10 +147,10 @@ GameObject:
   - component: {fileID: 3288748858032966346}
   - component: {fileID: 7969360559178860770}
   - component: {fileID: 8859768144676200351}
+  - component: {fileID: 4153783734810414930}
   - component: {fileID: 392540067062199298}
   - component: {fileID: 7977278655379702420}
   - component: {fileID: 6404020664104087420}
-  - component: {fileID: 4153783734810414930}
   - component: {fileID: 9016940167125703988}
   - component: {fileID: 6527334380957611528}
   - component: {fileID: 7900620663573404234}
@@ -229,6 +229,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4153783734810414930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4950844714296102715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 4118459356
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &392540067062199298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,27 +348,6 @@ MonoBehaviour:
   CheckMovementInitialOverlaps: 1
   KillVelocityWhenExceedMaxMovementIterations: 1
   KillRemainingMovementWhenExceedMaxMovementIterations: 1
---- !u!114 &4153783734810414930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4950844714296102715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4118459356
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!114 &9016940167125703988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382,10 +382,8 @@ MonoBehaviour:
   gameOjs:
   - {fileID: 7977278655379702420}
   - {fileID: 6404020664104087420}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 392540067062199298}
   - {fileID: 9016940167125703988}
-  - {fileID: 0}
 --- !u!114 &7900620663573404234
 MonoBehaviour:
   m_ObjectHideFlags: 0

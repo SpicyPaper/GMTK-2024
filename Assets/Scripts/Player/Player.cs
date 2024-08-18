@@ -1,8 +1,9 @@
 using KinematicCharacterController;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour
 {
     [Header("Unity objects")]
     [SerializeField] private GameObject meshParent;
