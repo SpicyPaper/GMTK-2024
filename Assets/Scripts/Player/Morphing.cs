@@ -7,7 +7,6 @@ using UnityEngine;
 public class Morphing : MonoBehaviour
 {
     [SerializeField] private Transform playerTransform;
-    [SerializeField] private LayerMask propLayerMask;
     [SerializeField] private GameObject initialGameObject;
     [SerializeField] private GameObject meshParent;
     [SerializeField] private float playerHeight = 2f;
@@ -15,12 +14,6 @@ public class Morphing : MonoBehaviour
     private bool isMorphed = false;
     private GameObject newInst;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))
@@ -32,9 +25,9 @@ public class Morphing : MonoBehaviour
                 Vector3 capsuleEnd = playerTransform.position + Vector3.up * (playerHeight - 0.5f);
 
                 if (Physics.CapsuleCast(capsuleStart, capsuleEnd, 0.5f, playerTransform.forward,
-                    out RaycastHit hit, raycastDistance, propLayerMask))
+                    out RaycastHit hit, raycastDistance))
                 {
-                    if (hit.collider.CompareTag("Prop"))
+                    if (hit.collider.gameObject.GetComponent<Prop>())
                     {
                         ChangeAppearanceAndTransform(hit.collider.gameObject);
                         isMorphed = true;
