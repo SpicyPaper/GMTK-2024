@@ -43,8 +43,7 @@ public class PlayShoot : MonoBehaviour
                 }
                 else if (hit.collider.CompareTag("Player"))
                 {
-                    hit.collider.GetComponent<PlayerInteraction>().HitPlayerServerRpc(
-                        hit.collider.GetComponent<NetworkObject>().OwnerClientId);
+                    hit.collider.GetComponent<PlayerInteraction>().TakeDamageServerRpc(20);
                 }
             }
             else

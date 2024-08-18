@@ -89,11 +89,12 @@ public class PlayerInteraction : NetworkBehaviour
     }
 
     // ServerRpc method to apply damage to the player
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void TakeDamageServerRpc(int damage)
     {
         if (IsServer)
         {
+            Debug.Log("Player took dmg: " + OwnerClientId);
             // Decrease the player's health
             CurrentHealth.Value -= damage;
 
