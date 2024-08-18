@@ -98,7 +98,6 @@ public class Player : NetworkBehaviour
             propCopyObject.GetComponent<Rigidbody>().isKinematic = true;
         }
 
-        Debug.LogWarning(propObject.name);
         if (propObject.TryGetComponent(out Prop prop))
         {
             Bounds computedBounds = prop.ComputeBounds();
