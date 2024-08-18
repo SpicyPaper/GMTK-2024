@@ -68,6 +68,7 @@ public class Morphing : MonoBehaviour
         newInst.transform.SetParent(meshParent.transform);
         newInst.transform.localPosition =
             new Vector3(0, -newCollider.center.y/2, 0);
+        newInst.transform.localRotation = Quaternion.Euler(Vector3.zero);
         newInst.transform.localScale = propObject.transform.localScale;
     }
 
