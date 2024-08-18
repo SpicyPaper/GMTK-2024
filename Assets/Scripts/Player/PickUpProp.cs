@@ -1,24 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerPickUpDrop : MonoBehaviour
+public class PickUpProp : MonoBehaviour
 {
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform objectGrabPoint;
-    [SerializeField] private LayerMask pickUpLayerMask;
     [SerializeField] private float playerHeight = 2f;
 
+    private Prop currentlyHeldObject;
 
-    private ObjectGrabbable currentlyHeldObject;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.E))
@@ -34,12 +23,12 @@ public class PlayerPickUpDrop : MonoBehaviour
                     Color.red, 1f);
 
                 if (Physics.CapsuleCast(capsuleStart, capsuleEnd, 0.5f, playerTransform.forward,
-                    out RaycastHit raycastHit, pickUpDistance, pickUpLayerMask))
+                    out RaycastHit raycastHit, pickUpDistance))
                 {                    
-                    if (raycastHit.transform.TryGetComponent(out ObjectGrabbable objectGrababble))
+                    if (raycastHit.transform.TryGetComponent(out Prop prop))
                     {
-                        objectGrababble.Grab(objectGrabPoint);
-                        currentlyHeldObject = objectGrababble;
+                        prop.Grab(objectGrabPoint);
+                        currentlyHeldObject = prop;
                     }
                 }
             }
