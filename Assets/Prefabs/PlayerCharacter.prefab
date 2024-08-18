@@ -158,6 +158,7 @@ GameObject:
   - component: {fileID: 7900620663573404234}
   - component: {fileID: 5991752234493099771}
   - component: {fileID: 4649466453538250473}
+  - component: {fileID: 214656258747031066}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -380,7 +381,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterModel: {fileID: 4950844714296102715}
   spawnPoint: {fileID: 0}
-  pv: 100
+  maxHealth: 100
+  CurrentHealth:
+    m_InternalValue: 0
 --- !u!114 &6527334380957611528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,6 +481,19 @@ MonoBehaviour:
   hitLayers:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &214656258747031066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4950844714296102715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18228e74111772c479caae27df658833, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CharacterCamera: {fileID: 634675165742975915}
 --- !u!1 &8079493146631326589
 GameObject:
   m_ObjectHideFlags: 0

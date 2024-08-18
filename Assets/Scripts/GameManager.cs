@@ -10,7 +10,11 @@ public class GameManager : NetworkBehaviour
     public Camera mainCamera;
     private Camera playerCamera;
 
+    public string type;
+
     private List<PlayerInteraction> players = new List<PlayerInteraction>(); // List to track all players
+
+    public GameObject localPlayer;
 
     void Awake()
     {
@@ -115,5 +119,30 @@ public class GameManager : NetworkBehaviour
         playerCamera.enabled = !playerCamera.enabled;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    public void getLocalPlayer()
+    {
+        // Assurez-vous que la session réseau est active
+        if (NetworkManager.Singleton.IsClient)
+        {
+            foreach (var clientPair in NetworkManager.Singleton.ConnectedClients)
+            {
+                // Vérifiez si l'identifiant du client correspond à celui du joueur local
+                if (clientPair.Key == NetworkManager.Singleton.LocalClientId)
+                {
+                    // Récupérez le NetworkObject associé au client
+                    NetworkObject networkObject = clientPair.Value.PlayerObject;
+
+                    // Affectez le GameObject du joueur local
+                    localPlayer = networkObject.gameObject;
+                    Debug.Log("Local Player found: " + localPlayer.name);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("Not running as a client!");
+        }
     }
 }

@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Etienne Scene.unity
     guid: c418db82ef9e5024a80bfc36ca93b2e4
+  - enabled: 1
+    path: Assets/Scenes/Sarah2.unity
+    guid: 7a97b31100eccb2438d2c47c6c792db5
   m_configObjects: {}
