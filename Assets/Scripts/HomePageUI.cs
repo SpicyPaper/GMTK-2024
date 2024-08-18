@@ -104,11 +104,7 @@ public class HomePageUI : MonoBehaviour
                 PlayerPrefs.SetString("PlayerName", "Player" + myuuidAsString);
 
             }
-            bool connected = await JoinRelay(gameCode);
-            //if (connected)
-            //{
-            //    PlayGame();
-            //}
+            await JoinRelay(gameCode);
         }
         else
         {
@@ -123,16 +119,15 @@ public class HomePageUI : MonoBehaviour
 
     void HunterSelected()
     {
-        selection(Type.Hunter.ToString());
+        Selection(Type.Hunter.ToString());
     }
     void MorphSelected()
     {
-        selection(Type.Morph.ToString());
+        Selection(Type.Morph.ToString());
     }
 
-    void selection(string type)
+    void Selection(string type)
     {
-        GameManager.Instance.getLocalPlayer();
         GameManager.Instance.type = type;
 
         PlayGame();
@@ -186,7 +181,6 @@ public class HomePageUI : MonoBehaviour
         CreateGamePopup.SetActive(false);
         joinGamePopup.SetActive(false);
         chooseTypePopUp.SetActive(true);
-
     }
     
     public void PlayGame()

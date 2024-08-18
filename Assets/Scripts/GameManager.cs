@@ -133,29 +133,4 @@ public class GameManager : NetworkBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-
-    public void getLocalPlayer()
-    {
-        // Assurez-vous que la session réseau est active
-        if (NetworkManager.Singleton.IsClient)
-        {
-            foreach (var clientPair in NetworkManager.Singleton.ConnectedClients)
-            {
-                // Vérifiez si l'identifiant du client correspond à celui du joueur local
-                if (clientPair.Key == NetworkManager.Singleton.LocalClientId)
-                {
-                    // Récupérez le NetworkObject associé au client
-                    NetworkObject networkObject = clientPair.Value.PlayerObject;
-
-                    // Affectez le GameObject du joueur local
-                    localPlayer = networkObject.gameObject;
-                    Debug.Log("Local Player found: " + localPlayer.name);
-                }
-            }
-        }
-        else
-        {
-            Debug.LogError("Not running as a client!");
-        }
-    }
 }
