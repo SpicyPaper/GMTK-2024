@@ -79,6 +79,7 @@ public class PlayerInteraction : NetworkBehaviour
 
             // Notify all clients to respawn this player
             RespawnClientRpc(respawnPosition);
+            CurrentHealth.Value = maxHealth;
         }
     }
 

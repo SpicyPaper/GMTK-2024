@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayShoot : MonoBehaviour
+public class PlayShoot : NetworkBehaviour
 {
     public Camera cam;  // Assign your camera in the Inspector
     public float maxDistance = 100f;  // Maximum distance for the raycast
@@ -11,6 +11,11 @@ public class PlayShoot : MonoBehaviour
 
     void Update()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
+
         // Check if the 'Q' key is pressed
         if (Input.GetKeyDown(KeyCode.Q))
         {
