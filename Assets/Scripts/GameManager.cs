@@ -1,6 +1,8 @@
-using UnityEngine;
-using Unity.Netcode;
 using System.Collections.Generic;
+using Unity.Netcode;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : NetworkBehaviour
 {
@@ -10,7 +12,13 @@ public class GameManager : NetworkBehaviour
     public Camera mainCamera;
     private Camera playerCamera;
 
+    public string type;
+
     private List<PlayerInteraction> players = new List<PlayerInteraction>(); // List to track all players
+
+    public GameObject localPlayer;
+
+    public NetworkVariable<bool> GameStarted = new NetworkVariable<bool>(false);
 
     void Awake()
     {
@@ -32,23 +40,20 @@ public class GameManager : NetworkBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
-        // P key
-        if ( Input.GetKeyDown(KeyCode.P))
-        {
-            HomePageUI.Instance.PlayGame();
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            SwapCamera();
-        }
     }
 
-    public void InitHost()
+    public void HandleGameButtons(Button start, Button reset)
     {
         if (IsHost)
         {
             Debug.Log("Assigning the button !");
-            UIManager.Instance.respawnButton.onClick.AddListener(StartNewRound);
+            reset.onClick.AddListener(ResetGame);
+            start.onClick.AddListener(StartRound);
+        }
+        else
+        {
+            reset.gameObject.SetActive(false);
+            start.gameObject.SetActive(false);
         }
     }
 
@@ -89,11 +94,19 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-    public void StartNewRound()
+    public void ResetGame()
     {
         // Logic to start a new round, respawn players, etc.
         // For example:
-        Debug.Log("Starting a new round");
+        Debug.Log("Reseting game");
+        SceneManager.LoadScene("AlexScene");
+        RespawnAllPlayersServerRpc();
+    }
+
+    public void StartRound()
+    {
+        Debug.Log("Starting game");
+        GameStarted.Value = true;
         RespawnAllPlayersServerRpc();
     }
 
@@ -102,8 +115,21 @@ public class GameManager : NetworkBehaviour
     {
         for (int i = 0; i < players.Count; i++)
         {
-            Transform assignedSpawnPoint = spawnPoints[i % spawnPoints.Length]; // Assign spawn point in a round-robin fashion
-            players[i].SetSpawnPoint(assignedSpawnPoint);
+            int rand = Random.Range(0, spawnPoints.Length);
+
+            Vector3 pos = spawnPoints[rand].position; // Assign spawn point in a round-robin fashion
+            players[i].SpawnPoint.Value = pos;
+        }
+        RespawnClientRpc();
+    }
+
+    [ClientRpc]
+    public void RespawnClientRpc()
+    {
+        Debug.Log("Starting respawn");
+
+        for (int i = 0; i < players.Count; i++)
+        {
             players[i].Respawn();
         }
     }

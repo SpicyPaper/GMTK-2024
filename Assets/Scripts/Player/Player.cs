@@ -10,6 +10,9 @@ public class Player : NetworkBehaviour
     [SerializeField] private GameObject meshParent;
     [SerializeField] private Transform objectGrabPoint;
     [SerializeField] private Camera playerCamera;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip[] audioClips;
+    [SerializeField] private AudioClip shootingNoise;
 
     [Header("Parameters")]
     [SerializeField] private float playerHeight = 2f;
@@ -43,6 +46,11 @@ public class Player : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             Shoot();
+        }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            PlayRandomSound();
         }
 
         HighlightProps();
@@ -184,6 +192,10 @@ public class Player : NetworkBehaviour
         }
 
         Debug.DrawRay(rayOrigin, ray * shootRaycastDistance, Color.red, 2f);
+
+        audioSource.clip = shootingNoise;
+        audioSource.Play();
+
     }
 
     private void HighlightProps()
@@ -240,5 +252,13 @@ public class Player : NetworkBehaviour
                 Destroy(outline);
             }
         }
+    }
+    
+    public void PlayRandomSound()
+    {
+        int randomIndex = Random.Range(0, audioClips.Length);
+        AudioClip randomClip = audioClips[randomIndex];
+        audioSource.clip = randomClip;
+        audioSource.Play();
     }
 }
