@@ -1,23 +1,35 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using static UnityEngine.Rendering.VirtualTexturing.Debugging;
+using UnityEngine.XR;
 
 public class PlayerInteraction : NetworkBehaviour
 {
     public GameObject characterModel;
     public Transform spawnPoint; // Reference to the spawn point where the player should respawn
-    public float pv = 100;
+    public int maxHealth = 100;
 
     public static event Action<PlayerInteraction> OnPlayerSpawned;
     public static event Action<PlayerInteraction> OnPlayerDespawned;
 
+    // Network variable to track the player's current health across the network
+    public NetworkVariable<int> CurrentHealth = new NetworkVariable<int>();
+
     void Start()
     {
-        if (IsOwner)
+        if (IsServer)
         {
-            // Add listener to the kill button if this is the local player
-            UIManager.Instance.killButton.onClick.AddListener(KillCharacter);
+            // Initialize the player's health on the server
+            CurrentHealth.Value = maxHealth;
         }
+
+        //if (IsOwner)
+        //{
+        //    // Add listener to the kill button if this is the local player
+        //    UIManager.Instance.killButton.onClick.AddListener(KillCharacter);
+        //}
+
         OnPlayerSpawned?.Invoke(this); // Notify that this player has spawned
     }
 
@@ -76,22 +88,46 @@ public class PlayerInteraction : NetworkBehaviour
         spawnPoint = newSpawnPoint;
     }
 
+    // ServerRpc method to apply damage to the player
     [ServerRpc]
-    public void HitPlayerServerRpc(ulong clientId)
+    public void TakeDamageServerRpc(int damage)
     {
-        ClientIdHittedClientRpC(clientId);
-    }
+        if (IsServer)
+        {
+            // Decrease the player's health
+            CurrentHealth.Value -= damage;
 
-    [ClientRpc]
-    private void ClientIdHittedClientRpC(ulong clientId)
-    {
-        if (GetComponent<NetworkObject>().OwnerClientId == clientId) {
-            pv -= 20;
-
-            if (pv <= 0)
+            // Check if the player's health has dropped to or below 0
+            if (CurrentHealth.Value <= 0)
             {
-                KillCharacterServerRpc();
+                Die();
             }
         }
     }
+
+    // Method to handle the player's death
+    private void Die()
+    {
+        if (IsServer)
+        {
+            //// Optionally instantiate a death effect at the player's position
+            //if (deathEffectPrefab != null)
+            //{
+            //    Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
+            //}
+
+            // Notify all clients that this player has died
+            DieClientRpc();
+        }
+    }
+
+    // ClientRpc to handle the death on all clients
+    [ClientRpc]
+    private void DieClientRpc()
+    {
+        // Hide or disable the character model to simulate death
+        characterModel.SetActive(false);
+    }
+
+
 }
