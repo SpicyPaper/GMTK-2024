@@ -24,8 +24,6 @@ public class Player : NetworkBehaviour
     private Prop currentlyHeldObject;
     private Text propGrabedText;
 
-    private bool isMorphed = false;
-
     private void Start()
     {
         propGrabedText = UIManager.Instance.objectDescription;
@@ -58,7 +56,6 @@ public class Player : NetworkBehaviour
             if (hit.collider.gameObject.GetComponent<Prop>())
             {
                 ChangeAppearanceAndTransform(hit.collider.gameObject);
-                isMorphed = true;
             }
         }
     }
@@ -160,8 +157,6 @@ public class Player : NetworkBehaviour
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, highlightRaycastDistance))
         {
             GameObject hitObject = hit.collider.gameObject;
-            Debug.LogWarning(hitObject.name);
-
             if (hitObject.TryGetComponent<Prop>(out var prop))
             {
                 if (hitObject != currentHighlightedObject)

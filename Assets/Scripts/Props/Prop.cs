@@ -82,9 +82,9 @@ public class Prop : MonoBehaviour
 
     public float GetSize()
     {
-        if (gameObject.TryGetComponent<Renderer>(out var renderer))
+        if (gameObject.TryGetComponent<BoxCollider>(out var boxCollider))
         {
-            Vector3 boundsSize = renderer.bounds.size;
+            Vector3 boundsSize = boxCollider.bounds.size;
             return boundsSize.x * boundsSize.y * boundsSize.z;
         }
 
