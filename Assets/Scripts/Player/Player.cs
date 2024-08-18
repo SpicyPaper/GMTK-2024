@@ -13,6 +13,7 @@ public class Player : NetworkBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip[] audioClips;
     [SerializeField] private AudioClip shootingNoise;
+    [SerializeField] private LayerMask playerLayer;
 
     [Header("Parameters")]
     [SerializeField] private float playerHeight = 2f;
@@ -199,7 +200,7 @@ public class Player : NetworkBehaviour
 
     private void HighlightProps()
     {
-        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, highlightRaycastDistance))
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, highlightRaycastDistance, ~playerLayer))
         {
             GameObject hitObject = hit.collider.gameObject;
             if (hitObject.TryGetComponent<Prop>(out var prop))
@@ -255,7 +256,7 @@ public class Player : NetworkBehaviour
     
     public void PlayRandomSound()
     {
-        int randomIndex = Random.Range(0, audioClips.Length);
+        int randomIndex = UnityEngine.Random.Range(0, audioClips.Length);
         AudioClip randomClip = audioClips[randomIndex];
         audioSource.clip = randomClip;
         audioSource.Play();
