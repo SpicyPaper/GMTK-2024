@@ -51,17 +51,7 @@ namespace DoorScript
         // Method to interact with the door (called by the player)
         public void Interact()
         {
-            if (IsServer)
-            {
-                Open.Value = !Open.Value;
-
-                ToggleDoorStateClientRpc();
-            }
-            else
-            {
-                // Request the server to handle the interaction
-                ToggleDoorStateServerRpc();
-            }
+            ToggleDoorStateServerRpc();
         }
 
         [ServerRpc(RequireOwnership = false)]
