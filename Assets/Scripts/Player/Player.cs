@@ -24,8 +24,6 @@ public class Player : NetworkBehaviour
     private Prop currentlyHeldObject;
     private Text propGrabedText;
 
-    private bool isMorphed = false;
-
     private void Start()
     {
         propGrabedText = UIManager.Instance.objectDescription;
@@ -51,23 +49,14 @@ public class Player : NetworkBehaviour
 
     private void Morph()
     {
-        if (!isMorphed)
+        Vector3 capsuleEnd = transform.position + Vector3.up * (playerHeight - 0.5f);
+        if (Physics.CapsuleCast(transform.position, capsuleEnd, 0.5f, transform.forward,
+            out RaycastHit hit, morphRaycastDistance))
         {
-            Vector3 capsuleEnd = transform.position + Vector3.up * (playerHeight - 0.5f);
-            if (Physics.CapsuleCast(transform.position, capsuleEnd, 0.5f, transform.forward,
-                out RaycastHit hit, morphRaycastDistance))
+            if (hit.collider.gameObject.GetComponent<Prop>())
             {
-                if (hit.collider.gameObject.GetComponent<Prop>())
-                {
-                    ChangeAppearanceAndTransform(hit.collider.gameObject);
-                    isMorphed = true;
-                }
+                ChangeAppearanceAndTransform(hit.collider.gameObject);
             }
-        }
-        else
-        {
-            ChangeAppearanceAndUntransform();
-            isMorphed = false;
         }
     }
 
@@ -92,13 +81,6 @@ public class Player : NetworkBehaviour
             Quaternion.Euler(Vector3.zero)
         );
         newInst.transform.localScale = propObject.transform.localScale;
-    }
-
-    private void ChangeAppearanceAndUntransform()
-    {
-        ChangeRendererVisibility(meshParent, true);
-        meshParent.GetComponent<KinematicCharacterMotor>().SetCapsuleDimensions(0.5f, 2, 1);
-        Destroy(newInst);
     }
 
     private void DisableColliders(GameObject target)
@@ -175,8 +157,6 @@ public class Player : NetworkBehaviour
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, highlightRaycastDistance))
         {
             GameObject hitObject = hit.collider.gameObject;
-            Debug.LogWarning(hitObject.name);
-
             if (hitObject.TryGetComponent<Prop>(out var prop))
             {
                 if (hitObject != currentHighlightedObject)

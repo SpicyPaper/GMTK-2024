@@ -91,7 +91,8 @@ namespace KinematicCharacterController.Examples
             }
 
             // Input for zooming the camera (disabled in WebGL because it can cause problems)
-            float scrollInput = -Input.GetAxis(MouseScrollInput);
+            //float scrollInput = -Input.GetAxis(MouseScrollInput);
+            float scrollInput = 0f;
 #if UNITY_WEBGL
         scrollInput = 0f;
 #endif
@@ -100,10 +101,10 @@ namespace KinematicCharacterController.Examples
             CharacterCamera.UpdateWithInput(Time.deltaTime, scrollInput, lookInputVector);
 
             // Handle toggling zoom level
-            if (Input.GetMouseButtonDown(1))
-            {
-                CharacterCamera.TargetDistance = (CharacterCamera.TargetDistance == 0f) ? CharacterCamera.DefaultDistance : 0f;
-            }
+            //if (Input.GetMouseButtonDown(1))
+            //{
+            //    CharacterCamera.TargetDistance = (CharacterCamera.TargetDistance == 0f) ? CharacterCamera.DefaultDistance : 0f;
+            //}
         }
 
         private void HandleCharacterInput()

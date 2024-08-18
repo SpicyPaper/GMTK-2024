@@ -17,6 +17,7 @@ using Unity.Services.Relay.Models;
 public class HomePageUI : MonoBehaviour
 {
     public GameObject joinGamePopup;
+    public GameObject chooseTypePopUp;
     public GameObject CreateGamePopup;
     public Button createGameButton;
     public Button joinGameButton;
@@ -24,12 +25,20 @@ public class HomePageUI : MonoBehaviour
     public Button StopButton;
     public Button confirmJoinButton;
     public Button backToHomeButton;
+    public Button hunterButton;
+    public Button morphButton;
     public TMP_InputField gameCodeInputField;
     public TMP_InputField hostGameCodeInputField;
     public TMP_InputField playerNameInputField;
     public Canvas mainCanvas;
     public Canvas debugCanvas;
     public static HomePageUI Instance;
+    public enum Type
+    {
+        Hunter,
+        Morph
+    }
+    public Type type;
 
 
     void Awake()
@@ -41,7 +50,9 @@ public class HomePageUI : MonoBehaviour
             joinGameButton.onClick.AddListener(OnJoinGameClicked);
             confirmJoinButton.onClick.AddListener(OnConfirmJoinClicked);
             backToHomeButton.onClick.AddListener(OnBackToHomeClicked);
-            playGameButton.onClick.AddListener(PlayGame);
+            playGameButton.onClick.AddListener(ChooseType);
+            hunterButton.onClick.AddListener(HunterSelected);
+            morphButton.onClick.AddListener(MorphSelected);
             StopButton.onClick.AddListener(StopRelay);
         }
         else
@@ -56,6 +67,7 @@ public class HomePageUI : MonoBehaviour
         debugCanvas.gameObject.SetActive(false);
         CreateGamePopup.SetActive(false); // Hide the popup at start
         joinGamePopup.SetActive(false); // Hide the popup at start
+        chooseTypePopUp.gameObject.SetActive(false); // Hide the popup at start
 
         await UnityServices.InitializeAsync();
 
@@ -109,6 +121,23 @@ public class HomePageUI : MonoBehaviour
         joinGamePopup.SetActive(false);
     }
 
+    void HunterSelected()
+    {
+        selection(Type.Hunter.ToString());
+    }
+    void MorphSelected()
+    {
+        selection(Type.Morph.ToString());
+    }
+
+    void selection(string type)
+    {
+        GameManager.Instance.getLocalPlayer();
+        GameManager.Instance.type = type;
+
+        PlayGame();
+    }
+
     private async void StartRelay()
     {
         string joinCode = await StartHostWithRelay();
@@ -150,12 +179,22 @@ public class HomePageUI : MonoBehaviour
 
         return !string.IsNullOrEmpty(joinCode) && NetworkManager.Singleton.StartClient();
     }
+
+    public void ChooseType()
+    {
+        createGameButton.gameObject.SetActive(false);
+        CreateGamePopup.SetActive(false);
+        joinGamePopup.SetActive(false);
+        chooseTypePopUp.SetActive(true);
+
+    }
     
     public void PlayGame()
     {
         Debug.Log("ININININ");
         mainCanvas.gameObject.SetActive(false);
         debugCanvas.gameObject.SetActive(true);
+        chooseTypePopUp.SetActive(false);
         joinGamePopup.SetActive(false);
         CreateGamePopup.SetActive(false);
         //debugCanvas.GetComponent<SpawnManager>().Initialize();
@@ -166,5 +205,19 @@ public class HomePageUI : MonoBehaviour
     void StopRelay()
     {
         // Should stop the relay server ,disconnecting all clients and go back the main menu
+    }
+
+    public void ChangeType()
+    {
+        mainCanvas.gameObject.SetActive(true);
+        debugCanvas.gameObject.SetActive(false);
+        CreateGamePopup.SetActive(false); // Hide the popup at start
+        joinGamePopup.SetActive(false); // Hide the popup at start
+        chooseTypePopUp.gameObject.SetActive(false); // Hide the popup at start
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        ChooseType();
     }
 }

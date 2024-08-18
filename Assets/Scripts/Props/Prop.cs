@@ -10,10 +10,14 @@ public class Prop : MonoBehaviour
     private Vector3 effectivePickupDistance;
     private Quaternion initRot;
 
-    private void Awake()
+    private void Start()
     {
         cameraTransform = Camera.main.transform;
-        objectRigidbody = gameObject.AddComponent<Rigidbody>();
+        objectRigidbody = gameObject.GetComponent<Rigidbody>();
+        if (!objectRigidbody)
+        {
+            objectRigidbody = gameObject.AddComponent<Rigidbody>();
+        }
         objectRigidbody.useGravity = true;
     }
 
@@ -78,9 +82,9 @@ public class Prop : MonoBehaviour
 
     public float GetSize()
     {
-        if (gameObject.TryGetComponent<Renderer>(out var renderer))
+        if (gameObject.TryGetComponent<BoxCollider>(out var boxCollider))
         {
-            Vector3 boundsSize = renderer.bounds.size;
+            Vector3 boundsSize = boxCollider.bounds.size;
             return boundsSize.x * boundsSize.y * boundsSize.z;
         }
 
