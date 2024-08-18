@@ -129,6 +129,4 @@ public class PlayerInteraction : NetworkBehaviour
         // Hide or disable the character model to simulate death
         characterModel.SetActive(false);
     }
-
-
 }
