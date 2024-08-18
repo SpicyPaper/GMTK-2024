@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using KinematicCharacterController;
@@ -36,7 +36,7 @@ namespace KinematicCharacterController.Examples
                 GameManager.Instance.SetPlayerCamera(CharacterCamera.Camera);
                 if (!IsHost)
                 {
-                    HomePageUI.Instance.PlayGame();
+                    HomePageUI.Instance.ChooseType();
                 }
 
             }
