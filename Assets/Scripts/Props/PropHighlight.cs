@@ -19,6 +19,7 @@ public class PropHighlight : MonoBehaviour
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, raycastDistance))
         {
             GameObject hitObject = hit.collider.gameObject;
+            Debug.LogWarning(hitObject.name);
             
             if (hitObject.TryGetComponent<Prop>(out var prop))
             {
