@@ -17,13 +17,16 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/EGO.unity
     guid: 15d198bfc57622347bc8b0df0f53d59b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Ego 2.unity
     guid: 46a11971b652ff447ba62fd4c6894392
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Etienne Scene.unity
     guid: c418db82ef9e5024a80bfc36ca93b2e4
   - enabled: 1
     path: Assets/Scenes/Sarah2.unity
     guid: 7a97b31100eccb2438d2c47c6c792db5
+  - enabled: 1
+    path: Assets/Scenes/AlexScene.unity
+    guid: d042d35d5e89496448bc711618defe20
   m_configObjects: {}

@@ -79,6 +79,7 @@ public class PlayerInteraction : NetworkBehaviour
 
             // Notify all clients to respawn this player
             RespawnClientRpc(respawnPosition);
+            CurrentHealth.Value = maxHealth;
         }
     }
 
@@ -92,24 +93,12 @@ public class PlayerInteraction : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void TakeDamageServerRpc(int damage)
     {
-        if (IsServer)
-        {
-            Debug.Log("Player took dmg: " + OwnerClientId);
-            // Decrease the player's health
-            CurrentHealth.Value -= damage;
+        Debug.Log("Player took dmg: " + OwnerClientId);
+        // Decrease the player's health
+        CurrentHealth.Value -= damage;
 
-            // Check if the player's health has dropped to or below 0
-            if (CurrentHealth.Value <= 0)
-            {
-                Die();
-            }
-        }
-    }
-
-    // Method to handle the player's death
-    private void Die()
-    {
-        if (IsServer)
+        // Check if the player's health has dropped to or below 0
+        if (CurrentHealth.Value <= 0)
         {
             //// Optionally instantiate a death effect at the player's position
             //if (deathEffectPrefab != null)
@@ -129,6 +118,4 @@ public class PlayerInteraction : NetworkBehaviour
         // Hide or disable the character model to simulate death
         characterModel.SetActive(false);
     }
-
-
 }

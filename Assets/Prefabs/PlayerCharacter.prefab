@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 611051754375510317}
   - component: {fileID: 634675165742975915}
   m_Layer: 0
-  m_Name: ExampleCamera
+  m_Name: Player Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,14 +147,12 @@ GameObject:
   - component: {fileID: 3288748858032966346}
   - component: {fileID: 7969360559178860770}
   - component: {fileID: 8859768144676200351}
+  - component: {fileID: 4153783734810414930}
+  - component: {fileID: 392540067062199298}
   - component: {fileID: 7977278655379702420}
   - component: {fileID: 6404020664104087420}
-  - component: {fileID: 1881716980843608879}
-  - component: {fileID: 1445967010057712786}
-  - component: {fileID: 4153783734810414930}
   - component: {fileID: 9016940167125703988}
   - component: {fileID: 6527334380957611528}
-  - component: {fileID: 3079668057612519062}
   - component: {fileID: 7900620663573404234}
   - component: {fileID: 5991752234493099771}
   - component: {fileID: 4649466453538250473}
@@ -233,6 +231,49 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4153783734810414930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4950844714296102715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 4118459356
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &392540067062199298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4950844714296102715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b883d40cc275ce438f7d728e2e05a45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshParent: {fileID: 8079493146631326589}
+  objectGrabPoint: {fileID: 8084855360501426981}
+  playerCamera: {fileID: 656505081858125775}
+  playerHeight: 2
+  shootRaycastDistance: 100
+  morphRaycastDistance: 5
+  grabRaycastDistance: 5
+  highlightRaycastDistance: 5
+  hightlightPropWidth: 10
+  hightlightPropColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &7977278655379702420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,64 +350,6 @@ MonoBehaviour:
   CheckMovementInitialOverlaps: 1
   KillVelocityWhenExceedMaxMovementIterations: 1
   KillRemainingMovementWhenExceedMaxMovementIterations: 1
---- !u!114 &1881716980843608879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4950844714296102715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56a9f9affad521341b8409a329983fec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerTransform: {fileID: 3288748858032966346}
-  objectGrabPoint: {fileID: 8084855360501426981}
-  pickUpLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
-  playerHeight: 2
---- !u!114 &1445967010057712786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4950844714296102715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d7155146afc2054dbc7fe49dd333d15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerTransform: {fileID: 3288748858032966346}
-  propLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
-  initialGameObject: {fileID: 4950844714296102715}
-  meshParent: {fileID: 8079493146631326589}
-  playerHeight: 2
---- !u!114 &4153783734810414930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4950844714296102715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4118459356
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!114 &9016940167125703988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -401,26 +384,10 @@ MonoBehaviour:
   gameOjs:
   - {fileID: 7977278655379702420}
   - {fileID: 6404020664104087420}
-  - {fileID: 1881716980843608879}
-  - {fileID: 1445967010057712786}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 9016940167125703988}
-  - {fileID: 3079668057612519062}
---- !u!114 &3079668057612519062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4950844714296102715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73acbbd306cc7a74bb5358bfebc7c742, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerCamera: {fileID: 656505081858125775}
-  raycastDistance: 100
-  outlineWidth: 30
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  - {fileID: 0}
 --- !u!114 &7900620663573404234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -570,7 +537,7 @@ GameObject:
   - component: {fileID: 8084855360501426981}
   - component: {fileID: 2197944139337372513}
   m_Layer: 0
-  m_Name: CameraTarget
+  m_Name: Grab point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
