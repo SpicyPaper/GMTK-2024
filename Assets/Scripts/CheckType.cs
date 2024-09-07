@@ -11,9 +11,7 @@ public class CheckType : NetworkBehaviour
     [SerializeField] Material hunterMat;
     [SerializeField] Material morphMat;
 
-    private GameManager gameManager;
-
-    private NetworkVariable<Type> CurrentType = new NetworkVariable<Type>(Type.Morph);
+    public NetworkVariable<Type> CurrentType = new(Type.Morph);
 
     public enum Type
     {
@@ -24,7 +22,7 @@ public class CheckType : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameManager.Instance;
+        CurrentType.OnValueChanged += OnTypeChanged;
         UpdateCharacter();
     }
 
@@ -33,20 +31,22 @@ public class CheckType : NetworkBehaviour
     {
         if (IsOwner)
         {
-            if (CurrentType.Value != gameManager.type)
-            {
-                ChangeCharacterServerRpc(gameManager.type);
-            }
-
             if (Input.GetKeyDown(KeyCode.Tab))
             {
                 HomePageUI.Instance.ChangeType();
             }
         }
     }
+    private void OnDestroy()
+    {
+        // Unsubscribe to avoid potential memory leaks
+        CurrentType.OnValueChanged -= OnTypeChanged;
+    }
 
     private void UpdateCharacter()
     {
+        Debug.Log(IsOwner);
+        Debug.Log(CurrentType.Value);
         switch (CurrentType.Value)
         {
             case Type.Hunter:
@@ -69,16 +69,29 @@ public class CheckType : NetworkBehaviour
         }
     }
 
+    private void OnTypeChanged(Type oldValue, Type newValue)
+    {
+        UpdateCharacter();
+    }
+
     [ServerRpc]
     private void ChangeCharacterServerRpc(Type type)
     {
         CurrentType.Value = type;
-        ChangeCharacterClientRpc();
+        //ChangeCharacterClientRpc();
     }
 
-    [ClientRpc]
-    private void ChangeCharacterClientRpc()
+    //[ClientRpc]
+    //private void ChangeCharacterClientRpc()
+    //{
+    //    UpdateCharacter();
+    //}
+
+    public void ChangeType(Type type)
     {
-        UpdateCharacter();
+        if (IsOwner)
+        {
+            ChangeCharacterServerRpc(type);
+        }
     }
 }

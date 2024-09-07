@@ -134,7 +134,7 @@ public class HomePageUI : MonoBehaviour
 
     void Selection(CheckType.Type type)
     {
-        GameManager.Instance.type = type;
+        GameManager.Instance.ChangeType(type);
 
         PlayGame();
     }

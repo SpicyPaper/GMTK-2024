@@ -12,8 +12,6 @@ public class GameManager : NetworkBehaviour
     public Camera mainCamera;
     private Camera playerCamera;
 
-    public CheckType.Type type;
-
     private List<PlayerInteraction> players = new List<PlayerInteraction>(); // List to track all players
 
     public NetworkVariable<bool> GameStarted = new NetworkVariable<bool>(false);
@@ -141,5 +139,13 @@ public class GameManager : NetworkBehaviour
         playerCamera.enabled = !playerCamera.enabled;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    public void ChangeType(CheckType.Type type)
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
+            players[i].GetComponent<CheckType>().ChangeType(type);
+        }
     }
 }

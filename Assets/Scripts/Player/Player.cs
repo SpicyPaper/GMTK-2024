@@ -36,7 +36,7 @@ public class Player : NetworkBehaviour
 
     void Update()
     {
-        switch (GameManager.Instance.type)
+        switch (GetComponent<CheckType>().CurrentType.Value)
         {
             case CheckType.Type.Hunter:
                 if (Input.GetKeyDown(KeyCode.Q))
