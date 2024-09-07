@@ -13,7 +13,8 @@ public class CheckType : NetworkBehaviour
 
     private GameManager gameManager;
 
-    public NetworkVariable<Type> CurrentType = new NetworkVariable<Type>(Type.Morph, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    private NetworkVariable<Type> CurrentType = new NetworkVariable<Type>(Type.Morph,
+        NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public enum Type
     {
@@ -24,13 +25,8 @@ public class CheckType : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (IsOwner)
-        {
-            gameManager = GameManager.Instance;
-            CurrentType.Value = gameManager.type;
-
-            ChangeCharacterServerRpc();
-        }
+        gameManager = GameManager.Instance;
+        UpdateCharacter();
     }
 
     // Update is called once per frame
@@ -40,8 +36,7 @@ public class CheckType : NetworkBehaviour
         {
             if (CurrentType.Value != gameManager.type)
             {
-                CurrentType.Value = gameManager.type;
-                ChangeCharacterServerRpc();
+                ChangeCharacterServerRpc(gameManager.type);
             }
 
             if (Input.GetKeyDown(KeyCode.Tab))
@@ -76,8 +71,9 @@ public class CheckType : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void ChangeCharacterServerRpc()
+    private void ChangeCharacterServerRpc(Type type)
     {
+        CurrentType.Value = type;
         ChangeCharacterClientRpc();
     }
 
