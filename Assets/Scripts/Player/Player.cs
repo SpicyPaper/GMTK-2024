@@ -1,5 +1,6 @@
 using KinematicCharacterController;
 using System;
+using System.Runtime.CompilerServices;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,7 +32,7 @@ public class Player : NetworkBehaviour
 
     private void Start()
     {
-        propGrabedText = UIManager.Instance.objectDescription;
+        propGrabedText = UIManager.Instance.objectDescription; 
     }
 
     void Update()
@@ -221,7 +222,7 @@ public class Player : NetworkBehaviour
         {
             if (hit.collider.gameObject.GetComponent<Prop>())
             {
-                Debug.Log("Aïe raté");
+                Debug.Log("Aï¿½e ratï¿½");
             }
             else if (hit.collider.CompareTag("Player"))
             {
