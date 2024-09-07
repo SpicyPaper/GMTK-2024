@@ -35,12 +35,7 @@ public class HomePageUI : MonoBehaviour
     public TMP_InputField playerNameInputField;
     public Canvas mainCanvas;
     public static HomePageUI Instance;
-    public enum Type
-    {
-        Hunter,
-        Morph
-    }
-    public Type type;
+    public CheckType.Type type;
 
     private bool isCameraSwapped = false;
 
@@ -130,16 +125,16 @@ public class HomePageUI : MonoBehaviour
 
     void HunterSelected()
     {
-        Selection(Type.Hunter);
+        Selection(CheckType.Type.Hunter);
     }
     void MorphSelected()
     {
-        Selection(Type.Morph);
+        Selection(CheckType.Type.Morph);
     }
 
-    void Selection(Type type)
+    void Selection(CheckType.Type type)
     {
-        GameManager.Instance.type = type;
+        GameManager.Instance.ChangeType(type);
 
         PlayGame();
     }
@@ -154,8 +149,6 @@ public class HomePageUI : MonoBehaviour
         //hostGameCodeInputField.readOnly = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
-
     }
 
     private async Task<bool> JoinRelay(string joinCode)

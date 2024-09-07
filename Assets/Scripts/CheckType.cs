@@ -1,50 +1,97 @@
 using KinematicCharacterController.Examples;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class CheckType : MonoBehaviour
+public class CheckType : NetworkBehaviour
 {
     [SerializeField] ExampleCharacterCamera CharacterCamera;
-    private HomePageUI.Type currentType;
-    private GameManager gameManager;
+    [SerializeField] List<Renderer> capsuleRend;
+    [SerializeField] Material hunterMat;
+    [SerializeField] Material morphMat;
+
+    public NetworkVariable<Type> CurrentType = new(Type.Morph);
+
+    public enum Type
+    {
+        Hunter,
+        Morph
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameManager.Instance;
-        currentType = gameManager.type;
-
-        UpdateCameraDistance();
+        CurrentType.OnValueChanged += OnTypeChanged;
+        UpdateCharacter();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (currentType != gameManager.type)
+        if (IsOwner)
         {
-            currentType = gameManager.type;
-            UpdateCameraDistance();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            HomePageUI.Instance.ChangeType();
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                HomePageUI.Instance.ChangeType();
+            }
         }
     }
-
-    private void UpdateCameraDistance()
+    private void OnDestroy()
     {
-        switch (currentType)
+        // Unsubscribe to avoid potential memory leaks
+        CurrentType.OnValueChanged -= OnTypeChanged;
+    }
+
+    private void UpdateCharacter()
+    {
+        Debug.Log(IsOwner);
+        Debug.Log(CurrentType.Value);
+        switch (CurrentType.Value)
         {
-            case HomePageUI.Type.Hunter:
+            case Type.Hunter:
                 CharacterCamera.TargetDistance = 0f;
+                for (int i = 0; i < capsuleRend.Count; i++)
+                {
+                    capsuleRend[i].material = hunterMat;
+                }
                 break;
-            case HomePageUI.Type.Morph:
+            case Type.Morph:
                 CharacterCamera.TargetDistance = CharacterCamera.DefaultDistance;
+                for (int i = 0; i < capsuleRend.Count; i++)
+                {
+                    capsuleRend[i].material = morphMat;
+                }
                 break;
             default:
                 Debug.Log("oups no tag");
                 break;
+        }
+    }
+
+    private void OnTypeChanged(Type oldValue, Type newValue)
+    {
+        UpdateCharacter();
+    }
+
+    [ServerRpc]
+    private void ChangeCharacterServerRpc(Type type)
+    {
+        CurrentType.Value = type;
+        //ChangeCharacterClientRpc();
+    }
+
+    //[ClientRpc]
+    //private void ChangeCharacterClientRpc()
+    //{
+    //    UpdateCharacter();
+    //}
+
+    public void ChangeType(Type type)
+    {
+        if (IsOwner)
+        {
+            ChangeCharacterServerRpc(type);
         }
     }
 }

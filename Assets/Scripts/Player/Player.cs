@@ -1,4 +1,6 @@
 using KinematicCharacterController;
+using System;
+using System.Runtime.CompilerServices;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,20 +32,20 @@ public class Player : NetworkBehaviour
 
     private void Start()
     {
-        propGrabedText = UIManager.Instance.objectDescription;
+        propGrabedText = UIManager.Instance.objectDescription; 
     }
 
     void Update()
     {
-        switch (GameManager.Instance.type)
+        switch (GetComponent<CheckType>().CurrentType.Value)
         {
-            case HomePageUI.Type.Hunter:
+            case CheckType.Type.Hunter:
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
                     Shoot();
                 }
                 break;
-            case HomePageUI.Type.Morph:
+            case CheckType.Type.Morph:
                 if (Input.GetKeyDown(KeyCode.F))
                 {
                     Morph();
@@ -188,7 +190,7 @@ public class Player : NetworkBehaviour
         {
             if (hit.collider.gameObject.GetComponent<Prop>())
             {
-                Debug.Log("Aïe raté");
+                Debug.Log("Aï¿½e ratï¿½");
             }
             else if (hit.collider.CompareTag("Player"))
             {
