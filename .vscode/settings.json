@@ -48,14 +48,10 @@
         "obj/": true,
         "Obj/": true,
         "ProjectSettings/": true,
-        "*.csproj": true,
         "temp/": true,
         "Temp/": true,
-        "Library/": true,
         "Logs/": true,
         "Packages/": true,
-        "ProjectSettings/": true,
-        "Temp/": true,
         "UserSettings/": true,
         "Assets/_TerrainAutoUpgrade/": true,
         "Assets/_TerrainAutoUpgrade.meta": true,
@@ -99,7 +95,7 @@
         "Assets/TextMesh Pro": true,
         "Assets/'TextMesh Pro.meta'": true,
         "Assets/Free Wood Door Pack/": true,
-        "Assets/Hand Painted Grass  Texture/": true,
+        "Assets/Hand Painted Grass  Texture/": true
     },
-    "dotnet.defaultSolution": "GMTK-2024.sln",
+    "dotnet.defaultSolution": "GMTK-2024.sln"
 }

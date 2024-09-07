@@ -13,7 +13,6 @@ public class Player : NetworkBehaviour
     [SerializeField] private Camera playerCamera;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip[] audioClips;
-    [SerializeField] private AudioClip shootingNoise;
     [SerializeField] private LayerMask playerLayer;
 
     [Header("Parameters")]
@@ -32,7 +31,7 @@ public class Player : NetworkBehaviour
 
     private void Start()
     {
-        propGrabedText = UIManager.Instance.objectDescription; 
+        propGrabedText = UIManager.Instance.objectDescription;
     }
 
     void Update()
@@ -184,7 +183,7 @@ public class Player : NetworkBehaviour
         }
 
         Vector3 ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)).direction;
-        Vector3 rayOrigin = new(transform.position.x, transform.position.y + 1.43f,transform.position.z);
+        Vector3 rayOrigin = new(transform.position.x, transform.position.y + 1.43f, transform.position.z);
 
         if (Physics.Raycast(rayOrigin, ray, out RaycastHit hit, 100f))
         {
@@ -200,8 +199,7 @@ public class Player : NetworkBehaviour
 
         Debug.DrawRay(rayOrigin, ray * shootRaycastDistance, Color.red, 2f);
 
-        audioSource.clip = shootingNoise;
-        audioSource.Play();
+        GetComponent<CheckType>().SoundShootServerRpc();
 
     }
 
@@ -274,7 +272,7 @@ public class Player : NetworkBehaviour
             }
         }
     }
-    
+
     public void PlayRandomSound()
     {
         int randomIndex = UnityEngine.Random.Range(0, audioClips.Length);

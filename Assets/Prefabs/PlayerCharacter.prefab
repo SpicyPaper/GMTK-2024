@@ -280,7 +280,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: cc6d55e283ca85846bfd18bd9610a383, type: 3}
   - {fileID: 8300000, guid: 04d772d13586c5240b4eae23936598e5, type: 3}
   - {fileID: 8300000, guid: 4f97eee901041d44e82a62264b697a80, type: 3}
-  shootingNoise: {fileID: 8300000, guid: 4310474905e266640852f43bd609a1a4, type: 3}
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -404,6 +403,7 @@ MonoBehaviour:
   - {fileID: 9016940167125703988}
   - {fileID: 392540067062199298}
   audioListener: {fileID: 611051754375510317}
+  isLocked: 0
 --- !u!114 &7900620663573404234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,6 +465,8 @@ MonoBehaviour:
   - {fileID: 8101976148705373239}
   hunterMat: {fileID: 2100000, guid: 96d75d3f2f1407146b7e58f491055303, type: 2}
   morphMat: {fileID: 2100000, guid: 3fb69eddaf752dd4bb5a3f6924776f27, type: 2}
+  audioSource: {fileID: 6072550049701438504}
+  shootingNoise: {fileID: 8300000, guid: 4310474905e266640852f43bd609a1a4, type: 3}
   CurrentType:
     m_InternalValue: 1
 --- !u!1 &5890457202516509180
