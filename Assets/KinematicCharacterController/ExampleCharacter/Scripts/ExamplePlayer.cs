@@ -20,6 +20,9 @@ namespace KinematicCharacterController.Examples
         private const string HorizontalInput = "Horizontal";
         private const string VerticalInput = "Vertical";
 
+        public bool isLocked = false;
+        private Vector3 initialPosition;
+
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
@@ -53,6 +56,8 @@ namespace KinematicCharacterController.Examples
                 }
                 audioListener.enabled = false;
             }
+
+            initialPosition = transform.position; // Store the initial position to avoid drift
         }
 
         private void Update()
@@ -67,7 +72,15 @@ namespace KinematicCharacterController.Examples
                 //Cursor.lockState = CursorLockMode.Locked;
             }
 
-            HandleCharacterInput();
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                Lock();
+            }
+
+            if (!isLocked)
+            { 
+                HandleCharacterInput();
+            }
         }
 
         private void LateUpdate()
@@ -126,6 +139,47 @@ namespace KinematicCharacterController.Examples
 
             // Apply inputs to character
             Character.SetInputs(ref characterInputs);
+        }
+
+        public void Lock()
+        {
+            Rigidbody rb = GetComponent<Rigidbody>();
+
+            if (isLocked)
+            {
+                rb.constraints = RigidbodyConstraints.None;
+
+                CharacterController characterController = GetComponent<CharacterController>();
+                if (characterController != null)
+                {
+                    characterController.enabled = true;
+                }
+
+                isLocked = false;
+            }
+            else
+            {
+                rb.constraints = RigidbodyConstraints.FreezeAll;
+
+                transform.position = initialPosition;
+
+                // TODO the player keeps its speed and we don wan dat
+
+                CharacterController characterController = GetComponent<CharacterController>();
+                if (characterController != null)
+                {
+                    characterController.enabled = false;
+                }
+
+                // Set the character's position and make it visible again
+                var ecc = gameObject.GetComponent<ExampleCharacterController>();
+                var state = ecc.Motor.GetState();
+                state.BaseVelocity = Vector3.zero;
+                state.AttachedRigidbodyVelocity = Vector3.zero;
+                ecc.Motor.ApplyState(state);
+
+                isLocked = true;
+            }
         }
     }
 }
