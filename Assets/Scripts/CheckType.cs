@@ -109,4 +109,17 @@ public class CheckType : NetworkBehaviour
         audioSource.clip = shootingNoise;
         audioSource.Play();
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SoundRandomSoundServerRpc(int randomIndex)
+    {
+        SoundRandomSoundClientRpc(randomIndex);
+    }
+
+    [ClientRpc]
+    public void SoundRandomSoundClientRpc(int randomIndex)
+    {
+        audioSource.clip = GetComponent<Player>().audioClips[randomIndex];
+        audioSource.Play();
+    }
 }

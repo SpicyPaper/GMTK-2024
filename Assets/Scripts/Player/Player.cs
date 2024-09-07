@@ -12,7 +12,6 @@ public class Player : NetworkBehaviour
     [SerializeField] private Transform objectGrabPoint;
     [SerializeField] private Camera playerCamera;
     [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip[] audioClips;
     [SerializeField] private LayerMask playerLayer;
 
     [Header("Parameters")]
@@ -28,6 +27,7 @@ public class Player : NetworkBehaviour
     private GameObject currentHighlightedObject;
     private Prop currentlyHeldObject;
     private Text propGrabedText;
+    public AudioClip[] audioClips;
 
     private void Start()
     {
@@ -198,7 +198,7 @@ public class Player : NetworkBehaviour
         {
             if (hit.collider.gameObject.GetComponent<Prop>())
             {
-                Debug.Log("A�e rat�");
+                GetComponent<PlayerInteraction>().TakeDamageServerRpc(20);
             }
             else if (hit.collider.CompareTag("Player"))
             {
@@ -288,5 +288,7 @@ public class Player : NetworkBehaviour
         AudioClip randomClip = audioClips[randomIndex];
         audioSource.clip = randomClip;
         audioSource.Play();
+
+        GetComponent<CheckType>().SoundRandomSoundServerRpc(randomIndex);
     }
 }
