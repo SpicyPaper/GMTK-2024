@@ -43,7 +43,6 @@ public class HomePageUI : MonoBehaviour
 
     private bool isCameraSwapped = false;
 
-
     void Awake()
     {
         if (Instance == null)
@@ -270,6 +269,5 @@ public class HomePageUI : MonoBehaviour
         // Hide the end game UI
         EndGameText.gameObject.SetActive(false);
         mainCanvas.gameObject.SetActive(false);
-
     }
 }

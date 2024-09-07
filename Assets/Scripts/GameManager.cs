@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,9 +11,19 @@ public class GameManager : NetworkBehaviour
     public Transform[] spawnPoints; // Array of spawn points in the scene
     // Reference to the main camera in the scene
     public Camera mainCamera;
+
+    public TMP_Text gameTimer;
+    public TMP_Text HunterScore;
+    public TMP_Text MorphScore;
+
+    public TMP_Text hunterTimer;
+    public GameObject hunterTimerObject;
+
     private Camera playerCamera;
 
     public Camera CurrentCamera;
+
+    public CheckType.Type CurrentType;
 
     private List<PlayerInteraction> players = new List<PlayerInteraction>(); // List to track all players
 
@@ -29,6 +40,12 @@ public class GameManager : NetworkBehaviour
 
     public int ScoreHunter = 0;
     public int ScoreMorph = 0;
+
+    private float gameStartedElapsedTime = 0;
+    private float hunterStartTime = 2;
+
+    private float gameElapsedTime = 0;
+    private float gameTime = 4;
 
     void Awake()
     {
@@ -51,6 +68,19 @@ public class GameManager : NetworkBehaviour
             Cursor.visible = true;
         }
 
+        gameTimer.text = ((int)gameElapsedTime - hunterStartTime).ToString();
+        HunterScore.text = (ScoreHunter).ToString();
+        MorphScore.text = (ScoreMorph).ToString();
+
+        if (gameStarted)
+        {
+            if (hunterTimerObject.activeSelf)
+            {
+                hunterTimer.text = ((int)(hunterStartTime - gameStartedElapsedTime)).ToString();
+            }
+            gameElapsedTime += Time.deltaTime;
+        }
+
         if (IsServer && gameStarted)
         {
             if (NumberHunterAlive == 0)
@@ -65,6 +95,19 @@ public class GameManager : NetworkBehaviour
                 Debug.Log("Hunters win");
                 gameStarted = false;
                 EndGameServerRPC(CheckType.Type.Hunter);
+            }
+
+            gameStartedElapsedTime += Time.deltaTime;
+
+            if (gameStartedElapsedTime > hunterStartTime)
+            {
+                HunterStartServerRpc();
+            }
+
+            if (gameElapsedTime > gameTime + hunterStartTime)
+            {
+                gameStarted = false;
+                EndGameServerRPC(CheckType.Type.Morph);
             }
         }
     }
@@ -159,7 +202,7 @@ public class GameManager : NetworkBehaviour
         gameStarted = true;
         HomePageUI.Instance.HideEndGameUI();
         RespawnAllPlayersServerRpc();
-
+        InitStartGameServerRpc();
 
         if (IsServer)
         {
@@ -177,9 +220,34 @@ public class GameManager : NetworkBehaviour
                     NumberMorphAlive++;
                 }
             }
+
+            gameStartedElapsedTime = 0;
+            gameElapsedTime = 0;
         }
+    }
 
+    [ServerRpc]
+    private void InitStartGameServerRpc()
+    {
+        InitStartGameClientRpc();
+    }
 
+    [ClientRpc]
+    public void InitStartGameClientRpc()
+    {
+        hunterTimerObject.SetActive(CurrentType == CheckType.Type.Hunter);
+    }
+
+    [ServerRpc]
+    private void HunterStartServerRpc()
+    {
+        HunterStartClientRpc();
+    }
+
+    [ClientRpc]
+    public void HunterStartClientRpc()
+    {
+        hunterTimerObject.SetActive(false);
     }
 
     [ServerRpc]
