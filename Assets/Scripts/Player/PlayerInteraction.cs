@@ -116,6 +116,20 @@ public class PlayerInteraction : NetworkBehaviour
             GameManager.Instance.IsAlive = false;
             HomePageUI.Instance.ShowCamButton();
         }
-            
+
+        if (IsServer)
+        {
+            // Reduce the number of players alive
+            if (GetComponent<CheckType>().CurrentType.Value == CheckType.Type.Hunter)
+            {
+                GameManager.Instance.NumberHunterAlive--;
+            }
+            else
+            {
+                GameManager.Instance.NumberMorphAlive--;
+            }
+        }
+
+
     }
 }

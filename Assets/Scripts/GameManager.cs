@@ -24,6 +24,12 @@ public class GameManager : NetworkBehaviour
 
     public bool IsAlive = true;
 
+    public int NumberHunterAlive = 0;
+    public int NumberMorphAlive = 0;
+
+    public int ScoreHunter = 0;
+    public int ScoreMorph = 0;
+
     void Awake()
     {
         if (Instance == null)
@@ -44,6 +50,44 @@ public class GameManager : NetworkBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+
+        if (IsServer)
+        {
+            if (NumberHunterAlive == 0)
+            {
+                Debug.Log("Morphs win");
+                GameStarted.Value = false;
+                EndGameServerRPC(CheckType.Type.Morph);
+
+            }
+            else if (NumberMorphAlive == 0)
+            {
+                Debug.Log("Hunters win");
+                GameStarted.Value = false;
+                EndGameServerRPC(CheckType.Type.Hunter);
+            }
+        }
+    }
+
+    [ServerRpc]
+    public void EndGameServerRPC(CheckType.Type type)
+    {
+        EndGameClientRPC(type);
+    }
+
+    [ClientRpc]
+    public void EndGameClientRPC(CheckType.Type type)
+    {
+        if (type == CheckType.Type.Hunter)
+        {
+            ScoreHunter++;
+        }
+        else
+        {
+            ScoreMorph++;
+        }
+
+        HomePageUI.Instance.ShowEndGameUI(type);
     }
 
     public void HandleGameButtons(Button start, Button reset, bool isServer)
@@ -105,6 +149,7 @@ public class GameManager : NetworkBehaviour
         Debug.Log("Reseting game");
         NetworkManager.Singleton.SceneManager.LoadScene("AlexScene", LoadSceneMode.Single);
         RespawnAllPlayersServerRpc();
+        HomePageUI.Instance.HideEndGameUI();
     }
 
     public void StartRound()
@@ -112,7 +157,29 @@ public class GameManager : NetworkBehaviour
         Debug.Log("Starting game");
         NetworkManager.Singleton.SceneManager.LoadScene("AlexScene", LoadSceneMode.Single);
         GameStarted.Value = true;
+        HomePageUI.Instance.HideEndGameUI();
         RespawnAllPlayersServerRpc();
+
+
+        if (IsServer)
+        {
+            NumberHunterAlive = 0;
+            NumberMorphAlive = 0;
+
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (players[i].GetComponent<CheckType>().CurrentType.Value == CheckType.Type.Hunter)
+                {
+                    NumberHunterAlive++;
+                }
+                else
+                {
+                    NumberMorphAlive++;
+                }
+            }
+        }
+
+
     }
 
     [ServerRpc]
@@ -206,7 +273,7 @@ public class GameManager : NetworkBehaviour
     {
         currentCameraIndex -= 1;
         if (currentCameraIndex < 0)
-            currentCameraIndex = playerCameras.Count -1;
+            currentCameraIndex = playerCameras.Count - 1;
         CurrentCamera.enabled = false;
         CurrentCamera = playerCameras[currentCameraIndex];
         CurrentCamera.enabled = true;
