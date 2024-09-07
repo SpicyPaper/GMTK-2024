@@ -12,11 +12,9 @@ public class GameManager : NetworkBehaviour
     public Camera mainCamera;
     private Camera playerCamera;
 
-    public HomePageUI.Type type;
+    public CheckType.Type type;
 
     private List<PlayerInteraction> players = new List<PlayerInteraction>(); // List to track all players
-
-    public GameObject localPlayer;
 
     public NetworkVariable<bool> GameStarted = new NetworkVariable<bool>(false);
 
@@ -106,6 +104,7 @@ public class GameManager : NetworkBehaviour
     public void StartRound()
     {
         Debug.Log("Starting game");
+        NetworkManager.Singleton.SceneManager.LoadScene("AlexScene", LoadSceneMode.Single);
         GameStarted.Value = true;
         RespawnAllPlayersServerRpc();
     }

@@ -34,7 +34,7 @@ public class PlayerInteraction : NetworkBehaviour
         OnPlayerSpawned?.Invoke(this); // Notify that this player has spawned
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
         OnPlayerDespawned?.Invoke(this); // Notify that this player has despawned
     }

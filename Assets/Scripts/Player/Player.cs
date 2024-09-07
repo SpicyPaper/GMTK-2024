@@ -38,13 +38,13 @@ public class Player : NetworkBehaviour
     {
         switch (GameManager.Instance.type)
         {
-            case HomePageUI.Type.Hunter:
+            case CheckType.Type.Hunter:
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
                     Shoot();
                 }
                 break;
-            case HomePageUI.Type.Morph:
+            case CheckType.Type.Morph:
                 if (Input.GetKeyDown(KeyCode.F))
                 {
                     Morph();
