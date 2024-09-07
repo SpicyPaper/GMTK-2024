@@ -10,6 +10,9 @@ public class Prop : MonoBehaviour
     private float effectivePickupDistance;
     private Quaternion initRot;
 
+    private float rotationSpeed = 1000f;
+    private float rotationAngle = 0f;
+
     private void Start()
     {
         cameraTransform = Camera.main.transform;
@@ -42,6 +45,11 @@ public class Prop : MonoBehaviour
         objectRigidbody.constraints = RigidbodyConstraints.None;
     }
 
+    public void Rotate(float mouseDelta)
+    {
+        rotationAngle += mouseDelta * rotationSpeed * Time.deltaTime;
+    }
+
     private void FixedUpdate()
     {
         if (rootPlayerTransform != null)
@@ -52,7 +60,8 @@ public class Prop : MonoBehaviour
 
             // Maintain the object's initial rotation relative to the player
             Quaternion relativeRotation = rootPlayerTransform.rotation * Quaternion.Inverse(initRot);
-            objectRigidbody.transform.rotation = relativeRotation * initRot;
+            Quaternion offsetRotation = Quaternion.Euler(0, rotationAngle, 0);
+            objectRigidbody.transform.rotation = relativeRotation * offsetRotation * initRot;
 
             // Stop any existing velocity
             objectRigidbody.velocity = Vector3.zero;

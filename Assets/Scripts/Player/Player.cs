@@ -64,6 +64,12 @@ public class Player : NetworkBehaviour
             PlayRandomSound();
         }
 
+        float mouseDelta = Input.mouseScrollDelta.y;
+        if (mouseDelta != 0)
+        {
+            RotateProp(mouseDelta);
+        }
+
         HighlightProps();
     }
 
@@ -163,6 +169,14 @@ public class Player : NetworkBehaviour
         {
             currentlyHeldObject.Drop();
             currentlyHeldObject = null;
+        }
+    }
+
+    private void RotateProp(float mouseDelta)
+    {
+        if (currentlyHeldObject != null && currentlyHeldObject.TryGetComponent<Prop>(out var prop))
+        {
+            prop.Rotate(mouseDelta);
         }
     }
 
