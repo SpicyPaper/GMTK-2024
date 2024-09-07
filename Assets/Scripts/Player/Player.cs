@@ -28,6 +28,8 @@ public class Player : NetworkBehaviour
     private Prop currentlyHeldObject;
     private Text propGrabedText;
     public AudioClip[] audioClips;
+    private float shootCooldown = 3f;
+    private float lastShootTime = -3f;
 
     private void Start()
     {
@@ -191,11 +193,18 @@ public class Player : NetworkBehaviour
             return;
         }
 
+        if (Time.time - lastShootTime < shootCooldown)
+        {
+            return;
+        }
+
         Vector3 ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)).direction;
         Vector3 rayOrigin = new(transform.position.x, transform.position.y + 1.43f, transform.position.z);
 
         if (Physics.Raycast(rayOrigin, ray, out RaycastHit hit, 100f))
         {
+            lastShootTime = Time.time;
+
             if (hit.collider.gameObject.GetComponent<Prop>())
             {
                 GetComponent<PlayerInteraction>().TakeDamageServerRpc(20);
