@@ -23,7 +23,7 @@ public class GameManager : NetworkBehaviour
 
     public Camera CurrentCamera;
 
-    public CheckType.Type CurrentType;
+    public CheckType.Type CurrentType = CheckType.Type.Morph;
 
     private List<PlayerInteraction> players = new List<PlayerInteraction>(); // List to track all players
 
@@ -45,7 +45,7 @@ public class GameManager : NetworkBehaviour
     private float hunterStartTime = 2;
 
     private float gameElapsedTime = 0;
-    private float gameTime = 4;
+    private float gameTime = 120;
 
     void Awake()
     {
@@ -69,6 +69,10 @@ public class GameManager : NetworkBehaviour
         }
 
         gameTimer.text = ((int)gameElapsedTime - hunterStartTime).ToString();
+        if (gameElapsedTime - hunterStartTime < 0)
+        {
+            gameTimer.text = (0).ToString();
+        }
         HunterScore.text = (ScoreHunter).ToString();
         MorphScore.text = (ScoreMorph).ToString();
 
