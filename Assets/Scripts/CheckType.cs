@@ -10,6 +10,8 @@ public class CheckType : NetworkBehaviour
     [SerializeField] List<Renderer> capsuleRend;
     [SerializeField] Material hunterMat;
     [SerializeField] Material morphMat;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip shootingNoise;
 
     public NetworkVariable<Type> CurrentType = new(Type.Morph);
 
@@ -93,5 +95,18 @@ public class CheckType : NetworkBehaviour
         {
             ChangeCharacterServerRpc(type);
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SoundShootServerRpc()
+    {
+        SoundShootClientRpc();
+    }
+
+    [ClientRpc]
+    public void SoundShootClientRpc()
+    {
+        audioSource.clip = shootingNoise;
+        audioSource.Play();
     }
 }
