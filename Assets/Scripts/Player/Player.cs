@@ -152,23 +152,15 @@ public class Player : NetworkBehaviour
 
     private void Grab()
     {
-        if (currentlyHeldObject == null)
+        if (currentHighlightedObject && currentlyHeldObject == null)
         {
-            Vector3 capsuleEnd = transform.position + Vector3.up * (playerHeight - 0.5f);
-            Debug.DrawRay(transform.position, transform.forward * grabRaycastDistance,
-                Color.red, 1f);
-
-            if (Physics.CapsuleCast(transform.position, capsuleEnd, 0.5f, transform.forward,
-                out RaycastHit raycastHit, grabRaycastDistance))
+            if (currentHighlightedObject.TryGetComponent<Prop>(out var prop))
             {
-                if (raycastHit.transform.TryGetComponent(out Prop prop))
-                {
-                    prop.Grab(objectGrabPoint);
-                    currentlyHeldObject = prop;
-                }
+                prop.Grab(objectGrabPoint);
+                currentlyHeldObject = prop;
             }
-        }
-        else
+        } 
+        else if (currentlyHeldObject != null)
         {
             currentlyHeldObject.Drop();
             currentlyHeldObject = null;

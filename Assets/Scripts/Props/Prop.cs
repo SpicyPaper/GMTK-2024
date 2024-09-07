@@ -7,7 +7,7 @@ public class Prop : MonoBehaviour
     private Transform cameraTransform;
     private Transform rootPlayerTransform;
     private Rigidbody objectRigidbody;
-    private Vector3 effectivePickupDistance;
+    private float effectivePickupDistance;
     private Quaternion initRot;
 
     private void Start()
@@ -31,8 +31,7 @@ public class Prop : MonoBehaviour
 
         objectRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
-        effectivePickupDistance = objectRigidbody.position -
-            rootPlayerTransform.position;
+        effectivePickupDistance = (objectRigidbody.position - rootPlayerTransform.position).magnitude;
     }
 
     public void Drop()
@@ -49,7 +48,7 @@ public class Prop : MonoBehaviour
         {
             // Calculate the target position for the object
             Vector3 targetPos = rootPlayerTransform.position +
-                cameraTransform.forward * effectivePickupDistance.magnitude + Vector3.up * 2;
+                rootPlayerTransform.forward * effectivePickupDistance + Vector3.up * 0.1f;
 
             // Maintain the object's initial rotation relative to the player
             Quaternion relativeRotation = rootPlayerTransform.rotation * Quaternion.Inverse(initRot);
@@ -73,7 +72,7 @@ public class Prop : MonoBehaviour
 
             // Drop the object if it exceeds a certain distance from the player
             if (Vector3.Distance(objectRigidbody.position, rootPlayerTransform.position) >
-                effectivePickupDistance.magnitude + 2f)
+                effectivePickupDistance + 2f)
             {
                 Drop();
             }
