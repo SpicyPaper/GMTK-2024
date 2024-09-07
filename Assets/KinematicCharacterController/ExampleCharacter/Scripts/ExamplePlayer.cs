@@ -46,7 +46,6 @@ namespace KinematicCharacterController.Examples
                 {
                     HomePageUI.Instance.ChooseType();
                 }
-
             }
             else
             {

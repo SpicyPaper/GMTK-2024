@@ -123,7 +123,6 @@ public class GameManager : NetworkBehaviour
     [ClientRpc]
     public void RespawnClientRpc()
     {
-        SceneManager.LoadScene("AlexScene");
         Debug.Log("Starting respawn");
 
         for (int i = 0; i < players.Count; i++)
