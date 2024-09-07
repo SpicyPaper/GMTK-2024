@@ -99,5 +99,12 @@ public class PlayerInteraction : NetworkBehaviour
     {
         // Hide or disable the character model to simulate death
         gameObject.SetActive(false);
+        GameManager.Instance.UpdateAvailableCamera();
+
+        // Use the first available camera
+        if (GameManager.Instance.CurrentCamera == GetComponentInChildren<Camera>())
+        {
+            GameManager.Instance.SwapCameraAfterDeath();
+        }
     }
 }
