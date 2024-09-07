@@ -99,7 +99,7 @@ public class GameManager : NetworkBehaviour
         // Logic to start a new round, respawn players, etc.
         // For example:
         Debug.Log("Reseting game");
-        SceneManager.LoadScene("AlexScene");
+
         RespawnAllPlayersServerRpc();
     }
 
@@ -126,6 +126,7 @@ public class GameManager : NetworkBehaviour
     [ClientRpc]
     public void RespawnClientRpc()
     {
+        SceneManager.LoadScene("AlexScene");
         Debug.Log("Starting respawn");
 
         for (int i = 0; i < players.Count; i++)
