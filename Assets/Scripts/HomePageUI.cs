@@ -43,7 +43,6 @@ public class HomePageUI : MonoBehaviour
 
     private bool isCameraSwapped = false;
 
-
     void Awake()
     {
         if (Instance == null)
@@ -94,6 +93,8 @@ public class HomePageUI : MonoBehaviour
         // Hide playerNameInputField
         playerNameInputField.gameObject.SetActive(false);
         GameManager.Instance.HandleGameButtons(startGameButton, resetGameButton, true);
+
+        playGameButton.interactable = false;
     }
 
     void OnJoinGameClicked()
@@ -160,6 +161,8 @@ public class HomePageUI : MonoBehaviour
         //hostGameCodeInputField.readOnly = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        playGameButton.interactable = true;
     }
 
     private async Task<bool> JoinRelay(string joinCode)
@@ -270,6 +273,5 @@ public class HomePageUI : MonoBehaviour
         // Hide the end game UI
         EndGameText.gameObject.SetActive(false);
         mainCanvas.gameObject.SetActive(false);
-
     }
 }

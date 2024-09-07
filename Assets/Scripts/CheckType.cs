@@ -80,19 +80,13 @@ public class CheckType : NetworkBehaviour
     private void ChangeCharacterServerRpc(Type type)
     {
         CurrentType.Value = type;
-        //ChangeCharacterClientRpc();
     }
-
-    //[ClientRpc]
-    //private void ChangeCharacterClientRpc()
-    //{
-    //    UpdateCharacter();
-    //}
 
     public void ChangeType(Type type)
     {
         if (IsOwner)
         {
+            GameManager.Instance.CurrentType = type;
             ChangeCharacterServerRpc(type);
         }
     }
