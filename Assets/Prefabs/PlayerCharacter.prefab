@@ -460,6 +460,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterCamera: {fileID: 634675165742975915}
+  capsuleRend:
+  - {fileID: 8102325867609098153}
+  - {fileID: 8101976148705373239}
+  hunterMat: {fileID: 2100000, guid: 96d75d3f2f1407146b7e58f491055303, type: 2}
+  morphMat: {fileID: 2100000, guid: 3fb69eddaf752dd4bb5a3f6924776f27, type: 2}
+  CurrentType:
+    m_InternalValue: 1
 --- !u!1 &5890457202516509180
 GameObject:
   m_ObjectHideFlags: 0

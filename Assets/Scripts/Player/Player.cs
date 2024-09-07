@@ -37,17 +37,28 @@ public class Player : NetworkBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        switch (GameManager.Instance.type)
         {
-            Morph();
+            case CheckType.Type.Hunter:
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    Shoot();
+                }
+                break;
+            case CheckType.Type.Morph:
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    Morph();
+                }
+                break;
+            default:
+                Debug.Log("Should not happen");
+                break;
         }
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             Grab();
-        }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Shoot();
         }
         if (Input.GetKeyDown(KeyCode.M))
         {
@@ -89,8 +100,16 @@ public class Player : NetworkBehaviour
 
     private void ChangeAppearanceAndTransform(GameObject propObject)
     {
+        // Destroy the previous transformation
+        foreach (Transform child in meshParent.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // Disable Renderer visibility
         ChangeRendererVisibility(meshParent, false);
 
+        // Create a copy of the prop for the transformation
         propCopyObject = Instantiate(propObject);
         DisableColliders(propCopyObject);
 
@@ -99,31 +118,51 @@ public class Player : NetworkBehaviour
             propCopyObject.GetComponent<Rigidbody>().isKinematic = true;
         }
 
-        if (propObject.TryGetComponent(out Prop prop))
-        {
-            Bounds computedBounds = prop.ComputeBounds();
+        propCopyObject.transform.SetParent(meshParent.transform);
+        propCopyObject.transform.localScale = propObject.transform.localScale;
+        propCopyObject.transform.SetLocalPositionAndRotation(
+            new Vector3(0, 0, 0),
+            Quaternion.Euler(Vector3.zero)
+        );
 
-            float height = computedBounds.size.y;
-            float radius = Mathf.Min(Mathf.Min(computedBounds.size.x, computedBounds.size.z) / 2f, height / 2f);
-            float yOffset = computedBounds.center.y - transform.position.y;
+        // Compute capsule propoerties for the character motor
+        Bounds computedBounds = ComputeBounds(propCopyObject);
 
-            transform.GetComponent<KinematicCharacterMotor>()
-                .SetCapsuleDimensions(radius, height, yOffset);
+        float height = computedBounds.size.y;
+        float radius = Mathf.Min(Mathf.Min(computedBounds.size.x, computedBounds.size.z) / 2f, height / 2f);
 
-            foreach (Transform child in meshParent.transform)
-            {
-                Destroy(child.gameObject);
-            }
-
-            propCopyObject.transform.SetParent(meshParent.transform);
-            propCopyObject.transform.SetLocalPositionAndRotation(
-                new Vector3(0, 0, 0),
-                Quaternion.Euler(Vector3.zero)
-            );
-
-            propCopyObject.transform.localScale = propObject.transform.localScale;
-        }
+        transform.GetComponent<KinematicCharacterMotor>()
+            .SetCapsuleDimensions(radius, height, height / 2f);
     }
+
+    private Bounds ComputeBounds(GameObject propCopy)
+    {
+        Bounds bounds = new(Vector3.zero, Vector3.zero);
+        bool boundsInitialized = false;
+
+        MeshRenderer[] renderers = propCopy.GetComponentsInChildren<MeshRenderer>();
+
+        foreach (MeshRenderer renderer in renderers)
+        {
+            Bounds worldBounds = renderer.bounds;
+            Vector3 localCenter = propCopy.transform.InverseTransformPoint(worldBounds.center);
+            Vector3 localSize = Vector3.Scale(worldBounds.size, renderer.transform.lossyScale);
+            Bounds localBounds = new(localCenter, localSize);
+
+            if (!boundsInitialized)
+            {
+                bounds = localBounds;
+                boundsInitialized = true;
+            }
+            else
+            {
+                bounds.Encapsulate(localBounds);
+            }
+        }
+
+        return bounds;
+    }
+
 
     private void DisableColliders(GameObject target)
     {
@@ -183,7 +222,7 @@ public class Player : NetworkBehaviour
         {
             if (hit.collider.gameObject.GetComponent<Prop>())
             {
-                Debug.Log("Aïe raté");
+                Debug.Log("Aï¿½e ratï¿½");
             }
             else if (hit.collider.CompareTag("Player"))
             {

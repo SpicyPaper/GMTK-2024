@@ -35,12 +35,7 @@ public class HomePageUI : MonoBehaviour
     public TMP_InputField playerNameInputField;
     public Canvas mainCanvas;
     public static HomePageUI Instance;
-    public enum Type
-    {
-        Hunter,
-        Morph
-    }
-    public Type type;
+    public CheckType.Type type;
 
     private bool isCameraSwapped = false;
 
@@ -88,6 +83,7 @@ public class HomePageUI : MonoBehaviour
         startPopUp.SetActive(false);
         // Hide playerNameInputField
         playerNameInputField.gameObject.SetActive(false);
+        GameManager.Instance.HandleGameButtons(startGameButton, resetGameButton, true);
     }
 
     void OnJoinGameClicked()
@@ -112,6 +108,8 @@ public class HomePageUI : MonoBehaviour
 
             }
             await JoinRelay(gameCode);
+
+            GameManager.Instance.HandleGameButtons(startGameButton, resetGameButton, false);
         }
         else
         {
@@ -127,14 +125,14 @@ public class HomePageUI : MonoBehaviour
 
     void HunterSelected()
     {
-        Selection(Type.Hunter.ToString());
+        Selection(CheckType.Type.Hunter);
     }
     void MorphSelected()
     {
-        Selection(Type.Morph.ToString());
+        Selection(CheckType.Type.Morph);
     }
 
-    void Selection(string type)
+    void Selection(CheckType.Type type)
     {
         GameManager.Instance.type = type;
 
@@ -151,8 +149,6 @@ public class HomePageUI : MonoBehaviour
         //hostGameCodeInputField.readOnly = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
-
     }
 
     private async Task<bool> JoinRelay(string joinCode)
@@ -200,8 +196,6 @@ public class HomePageUI : MonoBehaviour
         joinGamePopup.SetActive(false);
         startPopUp.SetActive(false);
         CreateGamePopup.SetActive(false);
-        //debugCanvas.GetComponent<SpawnManager>().Initialize();
-        GameManager.Instance.HandleGameButtons(startGameButton, resetGameButton);
         if (!isCameraSwapped)
         {
             isCameraSwapped = true;

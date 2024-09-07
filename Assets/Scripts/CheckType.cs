@@ -1,50 +1,84 @@
 using KinematicCharacterController.Examples;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class CheckType : MonoBehaviour
+public class CheckType : NetworkBehaviour
 {
     [SerializeField] ExampleCharacterCamera CharacterCamera;
-    private string currentType;
+    [SerializeField] List<Renderer> capsuleRend;
+    [SerializeField] Material hunterMat;
+    [SerializeField] Material morphMat;
+
     private GameManager gameManager;
+
+    private NetworkVariable<Type> CurrentType = new NetworkVariable<Type>(Type.Morph);
+
+    public enum Type
+    {
+        Hunter,
+        Morph
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         gameManager = GameManager.Instance;
-        currentType = gameManager.type;
-
-        UpdateCameraDistance();
+        UpdateCharacter();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (currentType != gameManager.type)
+        if (IsOwner)
         {
-            currentType = gameManager.type;
-            UpdateCameraDistance();
-        }
+            if (CurrentType.Value != gameManager.type)
+            {
+                ChangeCharacterServerRpc(gameManager.type);
+            }
 
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            HomePageUI.Instance.ChangeType();
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                HomePageUI.Instance.ChangeType();
+            }
         }
     }
 
-    private void UpdateCameraDistance()
+    private void UpdateCharacter()
     {
-        switch (currentType)
+        switch (CurrentType.Value)
         {
-            case "Hunter":
+            case Type.Hunter:
                 CharacterCamera.TargetDistance = 0f;
+                for (int i = 0; i < capsuleRend.Count; i++)
+                {
+                    capsuleRend[i].material = hunterMat;
+                }
                 break;
-            case "Morph":
+            case Type.Morph:
                 CharacterCamera.TargetDistance = CharacterCamera.DefaultDistance;
+                for (int i = 0; i < capsuleRend.Count; i++)
+                {
+                    capsuleRend[i].material = morphMat;
+                }
                 break;
             default:
                 Debug.Log("oups no tag");
                 break;
         }
+    }
+
+    [ServerRpc]
+    private void ChangeCharacterServerRpc(Type type)
+    {
+        CurrentType.Value = type;
+        ChangeCharacterClientRpc();
+    }
+
+    [ClientRpc]
+    private void ChangeCharacterClientRpc()
+    {
+        UpdateCharacter();
     }
 }

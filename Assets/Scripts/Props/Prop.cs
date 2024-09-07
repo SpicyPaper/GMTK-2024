@@ -80,34 +80,6 @@ public class Prop : MonoBehaviour
         }
     }
 
-    public Bounds ComputeBounds()
-    {
-        return CalculateBoundingBoxFromColliders(gameObject);
-    }
-
-    private Bounds CalculateBoundingBoxFromColliders(GameObject parent)
-    {
-        Bounds bounds = new(Vector3.zero, Vector3.zero);
-        bool boundsInitialized = false;
-
-        MeshRenderer[] renderers = parent.GetComponentsInChildren<MeshRenderer>();
-
-        foreach (MeshRenderer renderer in renderers)
-        {
-            if (!boundsInitialized)
-            {
-                bounds = renderer.bounds;
-                boundsInitialized = true;
-            }
-            else
-            {
-                bounds.Encapsulate(renderer.bounds);
-            }
-        }
-
-        return bounds;
-    }
-
     public float GetSize()
     {
         if (gameObject.TryGetComponent<BoxCollider>(out var boxCollider))

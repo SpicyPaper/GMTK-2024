@@ -171,8 +171,7 @@ MonoBehaviour:
   - {fileID: 9051311584783907404}
   - {fileID: 236475570616386872}
   mainCamera: {fileID: 5217229284469885284}
-  type: 
-  localPlayer: {fileID: 0}
+  type: 1
   GameStarted:
     m_InternalValue: 0
 --- !u!1 &4066248395511486898
