@@ -13,8 +13,7 @@ public class CheckType : NetworkBehaviour
 
     private GameManager gameManager;
 
-    private NetworkVariable<Type> CurrentType = new NetworkVariable<Type>(Type.Morph,
-        NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<Type> CurrentType = new NetworkVariable<Type>(Type.Morph);
 
     public enum Type
     {
