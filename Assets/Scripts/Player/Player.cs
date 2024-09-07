@@ -12,7 +12,6 @@ public class Player : NetworkBehaviour
     [SerializeField] private Transform objectGrabPoint;
     [SerializeField] private Camera playerCamera;
     [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip[] audioClips;
     [SerializeField] private LayerMask playerLayer;
 
     [Header("Parameters")]
@@ -28,6 +27,7 @@ public class Player : NetworkBehaviour
     private GameObject currentHighlightedObject;
     private Prop currentlyHeldObject;
     private Text propGrabedText;
+    public AudioClip[] audioClips;
 
     private void Start()
     {
@@ -289,6 +289,6 @@ public class Player : NetworkBehaviour
         audioSource.clip = randomClip;
         audioSource.Play();
 
-        GetComponent<CheckType>().SoundRandomSound(randomClip);
+        GetComponent<CheckType>().SoundRandomSoundServerRpc(randomIndex);
     }
 }
