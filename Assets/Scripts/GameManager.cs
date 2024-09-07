@@ -12,9 +12,13 @@ public class GameManager : NetworkBehaviour
     public Camera mainCamera;
     private Camera playerCamera;
 
+    public Camera CurrentCamera;
+
     private List<PlayerInteraction> players = new List<PlayerInteraction>(); // List to track all players
 
     public NetworkVariable<bool> GameStarted = new NetworkVariable<bool>(false);
+
+    public List<Camera> playerCameras = new List<Camera>();
 
     void Awake()
     {
@@ -136,6 +140,7 @@ public class GameManager : NetworkBehaviour
         Debug.Log("Swapping camera");
         mainCamera.enabled = !mainCamera.enabled;
         playerCamera.enabled = !playerCamera.enabled;
+        CurrentCamera = playerCamera != null ? playerCamera : mainCamera;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -145,6 +150,32 @@ public class GameManager : NetworkBehaviour
         for (int i = 0; i < players.Count; i++)
         {
             players[i].GetComponent<CheckType>().ChangeType(type);
+        }
+    }
+
+    public List<Camera> GetPlayerCameras()
+    {
+        List<Camera> cameras = new List<Camera>();
+        for (int i = 0; i < players.Count; i++)
+        {
+            // If player is alive
+            if (players[i].gameObject.activeSelf)
+                cameras.Add(players[i].GetComponentInChildren<Camera>());
+        }
+        return cameras;
+    }
+
+    public void UpdateAvailableCamera()
+    {
+        playerCameras = GetPlayerCameras();
+    }
+
+    public void SwapCameraAfterDeath()
+    {
+        if (playerCameras.Count > 0)
+        {
+            playerCameras[0].enabled = true;
+            CurrentCamera = playerCameras[0];
         }
     }
 }
