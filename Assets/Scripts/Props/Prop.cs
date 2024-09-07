@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class Prop : MonoBehaviour
+public class Prop : NetworkBehaviour
 {
     public enum SizeCategory { UNDEFINED, XS, S, M, L, XL, XXL }
 
@@ -26,6 +27,7 @@ public class Prop : MonoBehaviour
 
     public void Grab(Transform rootPlayerTransform)
     {
+        ChangeOwnerServerRpc();
         this.rootPlayerTransform = rootPlayerTransform;
         initRot = rootPlayerTransform.localRotation;
 
@@ -143,4 +145,9 @@ public class Prop : MonoBehaviour
         return bounds;
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void ChangeOwnerServerRpc()
+    {
+        GetComponent<NetworkObject>().ChangeOwnership(NetworkManager.Singleton.LocalClientId);
+    }
 }

@@ -76,6 +76,7 @@ public class HomePageUI : MonoBehaviour
         chooseTypePopUp.gameObject.SetActive(false); // Hide the popup at start
         startPopUp.SetActive(true);
         HideCamButton();
+        HideEndGameUI();
         mainCanvas.gameObject.SetActive(true);
 
         await UnityServices.InitializeAsync();
@@ -136,6 +137,7 @@ public class HomePageUI : MonoBehaviour
     {
         Selection(CheckType.Type.Hunter);
     }
+
     void MorphSelected()
     {
         Selection(CheckType.Type.Morph);
