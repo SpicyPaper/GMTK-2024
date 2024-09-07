@@ -12,7 +12,7 @@ public class GameManager : NetworkBehaviour
     public Camera mainCamera;
     private Camera playerCamera;
 
-    public string type;
+    public HomePageUI.Type type;
 
     private List<PlayerInteraction> players = new List<PlayerInteraction>(); // List to track all players
 

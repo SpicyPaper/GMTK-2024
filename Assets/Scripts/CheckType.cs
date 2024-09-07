@@ -6,7 +6,7 @@ using UnityEngine;
 public class CheckType : MonoBehaviour
 {
     [SerializeField] ExampleCharacterCamera CharacterCamera;
-    private string currentType;
+    private HomePageUI.Type currentType;
     private GameManager gameManager;
     // Start is called before the first frame update
     void Start()
@@ -36,10 +36,10 @@ public class CheckType : MonoBehaviour
     {
         switch (currentType)
         {
-            case "Hunter":
+            case HomePageUI.Type.Hunter:
                 CharacterCamera.TargetDistance = 0f;
                 break;
-            case "Morph":
+            case HomePageUI.Type.Morph:
                 CharacterCamera.TargetDistance = CharacterCamera.DefaultDistance;
                 break;
             default:

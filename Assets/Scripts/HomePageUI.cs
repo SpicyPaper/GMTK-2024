@@ -130,14 +130,14 @@ public class HomePageUI : MonoBehaviour
 
     void HunterSelected()
     {
-        Selection(Type.Hunter.ToString());
+        Selection(Type.Hunter);
     }
     void MorphSelected()
     {
-        Selection(Type.Morph.ToString());
+        Selection(Type.Morph);
     }
 
-    void Selection(string type)
+    void Selection(Type type)
     {
         GameManager.Instance.type = type;
 
