@@ -288,5 +288,7 @@ public class Player : NetworkBehaviour
         AudioClip randomClip = audioClips[randomIndex];
         audioSource.clip = randomClip;
         audioSource.Play();
+
+        GetComponent<CheckType>().SoundRandomSound(randomClip);
     }
 }
