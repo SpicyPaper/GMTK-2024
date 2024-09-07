@@ -27,7 +27,6 @@ public class Prop : NetworkBehaviour
 
     public void Grab(Transform rootPlayerTransform)
     {
-        ChangeOwnerServerRpc();
         this.rootPlayerTransform = rootPlayerTransform;
         initRot = rootPlayerTransform.localRotation;
 
@@ -145,9 +144,4 @@ public class Prop : NetworkBehaviour
         return bounds;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void ChangeOwnerServerRpc()
-    {
-        GetComponent<NetworkObject>().ChangeOwnership(NetworkManager.Singleton.LocalClientId);
-    }
 }
