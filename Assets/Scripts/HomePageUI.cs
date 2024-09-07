@@ -88,6 +88,7 @@ public class HomePageUI : MonoBehaviour
         startPopUp.SetActive(false);
         // Hide playerNameInputField
         playerNameInputField.gameObject.SetActive(false);
+        GameManager.Instance.HandleGameButtons(startGameButton, resetGameButton, true);
     }
 
     void OnJoinGameClicked()
@@ -112,6 +113,8 @@ public class HomePageUI : MonoBehaviour
 
             }
             await JoinRelay(gameCode);
+
+            GameManager.Instance.HandleGameButtons(startGameButton, resetGameButton, false);
         }
         else
         {
@@ -200,8 +203,6 @@ public class HomePageUI : MonoBehaviour
         joinGamePopup.SetActive(false);
         startPopUp.SetActive(false);
         CreateGamePopup.SetActive(false);
-        //debugCanvas.GetComponent<SpawnManager>().Initialize();
-        GameManager.Instance.HandleGameButtons(startGameButton, resetGameButton);
         if (!isCameraSwapped)
         {
             isCameraSwapped = true;
