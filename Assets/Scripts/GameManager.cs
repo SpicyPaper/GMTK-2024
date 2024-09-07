@@ -16,7 +16,7 @@ public class GameManager : NetworkBehaviour
 
     private List<PlayerInteraction> players = new List<PlayerInteraction>(); // List to track all players
 
-    public NetworkVariable<bool> GameStarted = new NetworkVariable<bool>(false);
+    private bool gameStarted = false;
 
     public List<Camera> playerCameras = new List<Camera>();
 
@@ -51,19 +51,19 @@ public class GameManager : NetworkBehaviour
             Cursor.visible = true;
         }
 
-        if (IsServer)
+        if (IsServer && gameStarted)
         {
             if (NumberHunterAlive == 0)
             {
                 Debug.Log("Morphs win");
-                GameStarted.Value = false;
+                gameStarted = false;
                 EndGameServerRPC(CheckType.Type.Morph);
 
             }
             else if (NumberMorphAlive == 0)
             {
                 Debug.Log("Hunters win");
-                GameStarted.Value = false;
+                gameStarted = false;
                 EndGameServerRPC(CheckType.Type.Hunter);
             }
         }
@@ -156,7 +156,7 @@ public class GameManager : NetworkBehaviour
     {
         Debug.Log("Starting game");
         NetworkManager.Singleton.SceneManager.LoadScene("AlexScene", LoadSceneMode.Single);
-        GameStarted.Value = true;
+        gameStarted = true;
         HomePageUI.Instance.HideEndGameUI();
         RespawnAllPlayersServerRpc();
 
@@ -254,7 +254,6 @@ public class GameManager : NetworkBehaviour
 
     public void ActivePlayerCamera()
     {
-        CurrentCamera.enabled = false;
         CurrentCamera = playerCamera;
         CurrentCamera.enabled = true;
     }
