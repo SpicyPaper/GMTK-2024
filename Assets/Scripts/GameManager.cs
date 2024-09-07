@@ -12,7 +12,7 @@ public class GameManager : NetworkBehaviour
     public Camera mainCamera;
     private Camera playerCamera;
 
-    public string type;
+    public HomePageUI.Type type;
 
     private List<PlayerInteraction> players = new List<PlayerInteraction>(); // List to track all players
 
@@ -42,9 +42,9 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-    public void HandleGameButtons(Button start, Button reset)
+    public void HandleGameButtons(Button start, Button reset, bool isServer)
     {
-        if (IsHost)
+        if (isServer)
         {
             Debug.Log("Assigning the button !");
             reset.onClick.AddListener(ResetGame);
@@ -99,7 +99,7 @@ public class GameManager : NetworkBehaviour
         // Logic to start a new round, respawn players, etc.
         // For example:
         Debug.Log("Reseting game");
-        SceneManager.LoadScene("AlexScene");
+        NetworkManager.Singleton.SceneManager.LoadScene("AlexScene", LoadSceneMode.Single);
         RespawnAllPlayersServerRpc();
     }
 
@@ -126,6 +126,7 @@ public class GameManager : NetworkBehaviour
     [ClientRpc]
     public void RespawnClientRpc()
     {
+        SceneManager.LoadScene("AlexScene");
         Debug.Log("Starting respawn");
 
         for (int i = 0; i < players.Count; i++)

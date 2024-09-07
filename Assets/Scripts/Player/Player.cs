@@ -36,19 +36,29 @@ public class Player : NetworkBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        switch (GameManager.Instance.type)
         {
-            Morph();
+            case HomePageUI.Type.Hunter:
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    Shoot();
+                }
+                break;
+            case HomePageUI.Type.Morph:
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    Morph();
+                }
+                break;
+            default:
+                Debug.Log("Should not happen");
+                break;
         }
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             Grab();
         }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Shoot();
-        }
-
         if (Input.GetKeyDown(KeyCode.M))
         {
             PlayRandomSound();

@@ -7,7 +7,7 @@ public class PlayerController : NetworkBehaviour
 {
     public GameObject characterModel;
     public Transform spawnPoint; // Reference to the spawn point where the player should respawn
-        
+
     public static event Action<PlayerController> OnPlayerSpawned;
     public static event Action<PlayerController> OnPlayerDespawned;
 
@@ -77,10 +77,10 @@ public class PlayerController : NetworkBehaviour
     }
 
     private void Update()
-    {   
+    {
         if (!IsOwner) return;
 
-        Vector3 moveDir = new Vector3(0,0,0);
+        Vector3 moveDir = new Vector3(0, 0, 0);
 
 
         if (Input.GetKey(KeyCode.W)) moveDir.z += +1f;
@@ -92,4 +92,4 @@ public class PlayerController : NetworkBehaviour
 
         transform.position += moveDir * moveSpeed * Time.deltaTime;
     }
-} 
+}
