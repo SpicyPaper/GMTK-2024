@@ -3430,6 +3430,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1455546441878021151, guid: 2c6803eaefbe99844936e0fdb90f45b0, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1455546441878021151, guid: 2c6803eaefbe99844936e0fdb90f45b0, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1455546441878021151, guid: 2c6803eaefbe99844936e0fdb90f45b0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.0881197
       objectReference: {fileID: 0}
@@ -3439,7 +3447,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1455546441878021151, guid: 2c6803eaefbe99844936e0fdb90f45b0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 10.950401
+      value: 23.73
       objectReference: {fileID: 0}
     - target: {fileID: 1455546441878021151, guid: 2c6803eaefbe99844936e0fdb90f45b0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3671,6 +3679,10 @@ MonoBehaviour:
   - {fileID: 292476064}
   - {fileID: 358083268}
   mainCamera: {fileID: 1689044965}
+  type: 
+  localPlayer: {fileID: 0}
+  GameStarted:
+    m_InternalValue: 0
 --- !u!114 &1141320142
 MonoBehaviour:
   m_ObjectHideFlags: 0
