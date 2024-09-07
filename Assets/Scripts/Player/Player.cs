@@ -61,7 +61,7 @@ public class Player : NetworkBehaviour
 
             if (Input.GetKeyDown(KeyCode.E))
             {
-                Grab();
+                TouchGrab();
             }
             if (Input.GetKeyDown(KeyCode.M))
             {
@@ -160,6 +160,11 @@ public class Player : NetworkBehaviour
         }
     }
 
+    private void TouchGrab()
+    {
+        GrabServerRpc();
+    }
+
     private void Grab()
     {
         if (currentHighlightedObject && currentlyHeldObject == null)
@@ -169,12 +174,18 @@ public class Player : NetworkBehaviour
                 prop.Grab(objectGrabPoint);
                 currentlyHeldObject = prop;
             }
-        } 
+        }
         else if (currentlyHeldObject != null)
         {
             currentlyHeldObject.Drop();
             currentlyHeldObject = null;
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void GrabServerRpc()
+    {
+        Grab();
     }
 
     private void RotateProp(float mouseDelta)

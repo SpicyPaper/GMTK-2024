@@ -269,6 +269,16 @@ MonoBehaviour:
   objectGrabPoint: {fileID: 8084855360501426981}
   playerCamera: {fileID: 656505081858125775}
   audioSource: {fileID: 6072550049701438504}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  playerHeight: 2
+  shootRaycastDistance: 100
+  morphRaycastDistance: 5
+  grabRaycastDistance: 5
+  highlightRaycastDistance: 5
+  hightlightPropWidth: 10
+  hightlightPropColor: {r: 1, g: 1, b: 1, a: 1}
   audioClips:
   - {fileID: 8300000, guid: c1e371fe57c8f594c9763354c50f76f6, type: 3}
   - {fileID: 8300000, guid: f6a96fdef6ff78743b8bb149394d96c1, type: 3}
@@ -280,16 +290,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: cc6d55e283ca85846bfd18bd9610a383, type: 3}
   - {fileID: 8300000, guid: 04d772d13586c5240b4eae23936598e5, type: 3}
   - {fileID: 8300000, guid: 4f97eee901041d44e82a62264b697a80, type: 3}
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  playerHeight: 2
-  shootRaycastDistance: 100
-  morphRaycastDistance: 5
-  grabRaycastDistance: 5
-  highlightRaycastDistance: 5
-  hightlightPropWidth: 10
-  hightlightPropColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &7977278655379702420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -401,7 +401,7 @@ MonoBehaviour:
   - {fileID: 7977278655379702420}
   - {fileID: 6404020664104087420}
   - {fileID: 9016940167125703988}
-  - {fileID: 392540067062199298}
+  - {fileID: 0}
   audioListener: {fileID: 611051754375510317}
   isLocked: 0
 --- !u!114 &7900620663573404234
