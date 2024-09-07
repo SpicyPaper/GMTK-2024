@@ -198,7 +198,7 @@ public class Player : NetworkBehaviour
         {
             if (hit.collider.gameObject.GetComponent<Prop>())
             {
-                Debug.Log("A�e rat�");
+                GetComponent<PlayerInteraction>().TakeDamageServerRpc(20);
             }
             else if (hit.collider.CompareTag("Player"))
             {
