@@ -70,14 +70,48 @@ public class Player : NetworkBehaviour
 
     private void Morph()
     {
-        Vector3 capsuleEnd = transform.position + Vector3.up * (playerHeight - 0.5f);
-        if (Physics.CapsuleCast(transform.position, capsuleEnd, 0.5f, transform.forward,
-            out RaycastHit hit, morphRaycastDistance))
+        if (currentHighlightedObject)
         {
-            GameObject propObject = GetParentWithProp(hit.transform.gameObject);
-            if (propObject)
+            // Destroy the previous transformation
+            foreach (Transform child in meshParent.transform)
             {
-                ChangeAppearanceAndTransform(propObject);
+                Destroy(child.gameObject);
+            }
+
+            // Disable Renderer visibility
+            ChangeRendererVisibility(meshParent, false);
+
+            RemoveHighlight();
+
+            // Create a copy of the prop for the transformation
+            propCopyObject = Instantiate(currentHighlightedObject);
+
+            AddHighlight(currentHighlightedObject);
+
+            DisableColliders(propCopyObject);
+
+            if (propCopyObject.GetComponent<Rigidbody>())
+            {
+                propCopyObject.GetComponent<Rigidbody>().isKinematic = true;
+            }
+
+            propCopyObject.transform.SetParent(meshParent.transform);
+            propCopyObject.transform.localScale = currentHighlightedObject.transform.localScale;
+            propCopyObject.transform.SetLocalPositionAndRotation(
+                new Vector3(0, 0, 0),
+                Quaternion.Euler(Vector3.zero)
+            );
+
+            // Compute capsule propoerties for the character motor
+            if (propCopyObject.TryGetComponent<Prop>(out var prop))
+            {
+                Bounds computedBounds = prop.ComputeBounds();
+
+                float height = computedBounds.size.y;
+                float radius = Mathf.Min(Mathf.Min(computedBounds.size.x, computedBounds.size.z) / 2f, height / 2f);
+
+                transform.GetComponent<KinematicCharacterMotor>()
+                    .SetCapsuleDimensions(radius, height, height / 2f);
             }
         }
     }
@@ -97,72 +131,6 @@ public class Player : NetworkBehaviour
 
         return null;
     }
-
-    private void ChangeAppearanceAndTransform(GameObject propObject)
-    {
-        // Destroy the previous transformation
-        foreach (Transform child in meshParent.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        // Disable Renderer visibility
-        ChangeRendererVisibility(meshParent, false);
-
-        // Create a copy of the prop for the transformation
-        propCopyObject = Instantiate(propObject);
-        DisableColliders(propCopyObject);
-
-        if (propCopyObject.GetComponent<Rigidbody>())
-        {
-            propCopyObject.GetComponent<Rigidbody>().isKinematic = true;
-        }
-
-        propCopyObject.transform.SetParent(meshParent.transform);
-        propCopyObject.transform.localScale = propObject.transform.localScale;
-        propCopyObject.transform.SetLocalPositionAndRotation(
-            new Vector3(0, 0, 0),
-            Quaternion.Euler(Vector3.zero)
-        );
-
-        // Compute capsule propoerties for the character motor
-        Bounds computedBounds = ComputeBounds(propCopyObject);
-
-        float height = computedBounds.size.y;
-        float radius = Mathf.Min(Mathf.Min(computedBounds.size.x, computedBounds.size.z) / 2f, height / 2f);
-
-        transform.GetComponent<KinematicCharacterMotor>()
-            .SetCapsuleDimensions(radius, height, height / 2f);
-    }
-
-    private Bounds ComputeBounds(GameObject propCopy)
-    {
-        Bounds bounds = new(Vector3.zero, Vector3.zero);
-        bool boundsInitialized = false;
-
-        MeshRenderer[] renderers = propCopy.GetComponentsInChildren<MeshRenderer>();
-
-        foreach (MeshRenderer renderer in renderers)
-        {
-            Bounds worldBounds = renderer.bounds;
-            Vector3 localCenter = propCopy.transform.InverseTransformPoint(worldBounds.center);
-            Vector3 localSize = Vector3.Scale(worldBounds.size, renderer.transform.lossyScale);
-            Bounds localBounds = new(localCenter, localSize);
-
-            if (!boundsInitialized)
-            {
-                bounds = localBounds;
-                boundsInitialized = true;
-            }
-            else
-            {
-                bounds.Encapsulate(localBounds);
-            }
-        }
-
-        return bounds;
-    }
-
 
     private void DisableColliders(GameObject target)
     {
@@ -239,24 +207,39 @@ public class Player : NetworkBehaviour
 
     private void HighlightProps()
     {
-        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, highlightRaycastDistance, ~playerLayer))
+        GameObject target = null;
+
+        // Check for props in overlaping sphere
+        Collider[] overlapHits = Physics.OverlapSphere(transform.position, 2f, ~playerLayer);
+        foreach (Collider overlapHit in overlapHits)
         {
-            GameObject hitObject = hit.collider.gameObject;
-            if (hitObject.TryGetComponent<Prop>(out var prop))
+            GameObject hitObject = GetParentWithProp(overlapHit.transform.gameObject);
+            if (hitObject && hitObject.TryGetComponent<Prop>(out _))
             {
-                if (hitObject != currentHighlightedObject)
+                target = hitObject;
+            }
+        }
+
+        if (target == null)
+        {
+            if (Physics.SphereCast(transform.position, 2f, transform.forward, out RaycastHit hit2, highlightRaycastDistance, ~playerLayer))
+            {
+                GameObject hitObject = GetParentWithProp(hit2.transform.gameObject);
+                if (hitObject && hitObject.TryGetComponent<Prop>(out _))
                 {
-                    RemoveHighlight();
-                    AddHighlight(hitObject);
-                    currentHighlightedObject = hitObject;
-                    propGrabedText.text = hitObject.name + " [ Size: " + prop.GetSizeCategory() + "(" + prop.GetSize() + ") ]";
+                    target = hitObject;
                 }
             }
-            else
+        }
+
+        if (target && target.TryGetComponent<Prop>(out var prop))
+        {
+            if (target != currentHighlightedObject)
             {
                 RemoveHighlight();
-                currentHighlightedObject = null;
-                propGrabedText.text = "";
+                AddHighlight(target);
+                currentHighlightedObject = target;
+                propGrabedText.text = target.name + " [ Size: " + prop.GetSizeCategory() + "(" + prop.GetSize() + ") ]";
             }
         }
         else
@@ -285,10 +268,9 @@ public class Player : NetworkBehaviour
     {
         if (currentHighlightedObject != null)
         {
-            Outline outline = currentHighlightedObject.GetComponent<Outline>();
-            if (outline != null)
+            if (currentHighlightedObject.TryGetComponent<Outline>(out var outline))
             {
-                Destroy(outline);
+                DestroyImmediate(outline);
             }
         }
     }

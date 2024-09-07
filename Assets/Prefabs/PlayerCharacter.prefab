@@ -288,7 +288,7 @@ MonoBehaviour:
   shootRaycastDistance: 100
   morphRaycastDistance: 5
   grabRaycastDistance: 5
-  highlightRaycastDistance: 50
+  highlightRaycastDistance: 5
   hightlightPropWidth: 10
   hightlightPropColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &7977278655379702420
