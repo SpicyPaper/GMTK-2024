@@ -82,13 +82,8 @@ public class Prop : MonoBehaviour
 
     public float GetSize()
     {
-        if (gameObject.TryGetComponent<BoxCollider>(out var boxCollider))
-        {
-            Vector3 boundsSize = boxCollider.bounds.size;
-            return boundsSize.x * boundsSize.y * boundsSize.z;
-        }
-
-        return 0;
+        Vector3 bounds = ComputeBounds().size;
+        return bounds.x * bounds.y * bounds.z;
     }
 
     public SizeCategory GetSizeCategory()
@@ -111,4 +106,33 @@ public class Prop : MonoBehaviour
         else if (size <= 64f) return SizeCategory.XL;
         else return SizeCategory.XXL;
     }
+
+    public Bounds ComputeBounds()
+    {
+        Bounds bounds = new(Vector3.zero, Vector3.zero);
+        bool boundsInitialized = false;
+
+        MeshRenderer[] renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+
+        foreach (MeshRenderer renderer in renderers)
+        {
+            Bounds worldBounds = renderer.bounds;
+            Vector3 localCenter = gameObject.transform.InverseTransformPoint(worldBounds.center);
+            Vector3 localSize = Vector3.Scale(worldBounds.size, renderer.transform.lossyScale);
+            Bounds localBounds = new(localCenter, localSize);
+
+            if (!boundsInitialized)
+            {
+                bounds = localBounds;
+                boundsInitialized = true;
+            }
+            else
+            {
+                bounds.Encapsulate(localBounds);
+            }
+        }
+
+        return bounds;
+    }
+
 }
