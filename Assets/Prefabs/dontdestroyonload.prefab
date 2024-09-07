@@ -175,7 +175,6 @@ MonoBehaviour:
   GameStarted:
     m_InternalValue: 0
   playerCameras: []
-  IsAlive: 1
 --- !u!1 &4066248395511486898
 GameObject:
   m_ObjectHideFlags: 0

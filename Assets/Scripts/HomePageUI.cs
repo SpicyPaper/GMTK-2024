@@ -39,6 +39,8 @@ public class HomePageUI : MonoBehaviour
     public static HomePageUI Instance;
     public CheckType.Type type;
 
+    public TMP_Text EndGameText;
+
     private bool isCameraSwapped = false;
 
 
@@ -68,7 +70,7 @@ public class HomePageUI : MonoBehaviour
     async void Start()
     {
         // Ensure the canvas is visible at the start
-        
+
         CreateGamePopup.SetActive(false); // Hide the popup at start
         joinGamePopup.SetActive(false); // Hide the popup at start
         chooseTypePopUp.gameObject.SetActive(false); // Hide the popup at start
@@ -244,12 +246,28 @@ public class HomePageUI : MonoBehaviour
         mainCanvas.gameObject.SetActive(false);
         prevCamButton.gameObject.SetActive(false);
         nextCamButton.gameObject.SetActive(false);
-    }    
-    
+    }
+
     public void ShowCamButton()
     {
         mainCanvas.gameObject.SetActive(true);
         prevCamButton.gameObject.SetActive(true);
         nextCamButton.gameObject.SetActive(true);
+    }
+
+    public void ShowEndGameUI(CheckType.Type type)
+    {
+        // Show the end game UI
+        mainCanvas.gameObject.SetActive(true);
+        EndGameText.text = type == CheckType.Type.Hunter ? "Hunters Win" : "Morphs Win";
+        EndGameText.gameObject.SetActive(true);
+    }
+
+    public void HideEndGameUI()
+    {
+        // Hide the end game UI
+        EndGameText.gameObject.SetActive(false);
+        mainCanvas.gameObject.SetActive(false);
+
     }
 }
