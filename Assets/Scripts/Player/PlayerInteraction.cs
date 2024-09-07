@@ -65,6 +65,10 @@ public class PlayerInteraction : NetworkBehaviour
     public void Respawn()
     {
         gameObject.SetActive(true);
+        GameManager.Instance.IsAlive = true;
+        GameManager.Instance.ActivePlayerCamera();
+        HomePageUI.Instance.HideCamButton();
+
         // Set the character's position and make it visible again
         var ecc = gameObject.GetComponent<ExampleCharacterController>();
         ecc.Motor.SetPositionAndRotation(SpawnPoint.Value, transform.rotation);
@@ -106,5 +110,12 @@ public class PlayerInteraction : NetworkBehaviour
         {
             GameManager.Instance.SwapCameraAfterDeath();
         }
+
+        if (IsOwner)
+        {
+            GameManager.Instance.IsAlive = false;
+            HomePageUI.Instance.ShowCamButton();
+        }
+            
     }
 }

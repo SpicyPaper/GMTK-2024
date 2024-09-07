@@ -17,27 +17,31 @@ namespace CameraDoorScript
         // Update is called once per frame
         void Update()
         {
-            RaycastHit hit;
-            //Debug.DrawRay(transform.position, transform.forward, Color.green);
-            if (Input.GetKeyDown(KeyCode.E))
+            if (GameManager.Instance.IsAlive)
             {
-                if (Physics.Raycast(transform.position, transform.forward, out hit, DistanceOpen))
+                RaycastHit hit;
+                //Debug.DrawRay(transform.position, transform.forward, Color.green);
+                if (Input.GetKeyDown(KeyCode.E))
                 {
-                    if (hit.transform.GetComponent<DoorScript.Door>())
+                    if (Physics.Raycast(transform.position, transform.forward, out hit, DistanceOpen))
                     {
-                        //text.SetActive (true);
-                        hit.transform.GetComponent<DoorScript.Door>().OpenDoor();
+                        if (hit.transform.GetComponent<DoorScript.Door>())
+                        {
+                            //text.SetActive (true);
+                            hit.transform.GetComponent<DoorScript.Door>().OpenDoor();
+                        }
+                        else
+                        {
+                            //text.SetActive (false);
+                        }
                     }
                     else
                     {
                         //text.SetActive (false);
                     }
                 }
-                else
-                {
-                    //text.SetActive (false);
-                }
             }
+
         }
     }
 }

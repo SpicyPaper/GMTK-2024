@@ -30,6 +30,8 @@ public class HomePageUI : MonoBehaviour
     public Button backToHomeButton;
     public Button hunterButton;
     public Button morphButton;
+    public Button prevCamButton;
+    public Button nextCamButton;
     public TMP_InputField gameCodeInputField;
     public TMP_InputField hostGameCodeInputField;
     public TMP_InputField playerNameInputField;
@@ -53,6 +55,9 @@ public class HomePageUI : MonoBehaviour
             hunterButton.onClick.AddListener(HunterSelected);
             morphButton.onClick.AddListener(MorphSelected);
             StopButton.onClick.AddListener(StopRelay);
+            prevCamButton.onClick.AddListener(NextCam);
+            nextCamButton.onClick.AddListener(NextCam);
+            prevCamButton.onClick.AddListener(PrevCam);
         }
         else
         {
@@ -63,11 +68,13 @@ public class HomePageUI : MonoBehaviour
     async void Start()
     {
         // Ensure the canvas is visible at the start
-        mainCanvas.gameObject.SetActive(true);
+        
         CreateGamePopup.SetActive(false); // Hide the popup at start
         joinGamePopup.SetActive(false); // Hide the popup at start
         chooseTypePopUp.gameObject.SetActive(false); // Hide the popup at start
         startPopUp.SetActive(true);
+        HideCamButton();
+        mainCanvas.gameObject.SetActive(true);
 
         await UnityServices.InitializeAsync();
 
@@ -220,5 +227,29 @@ public class HomePageUI : MonoBehaviour
         Cursor.visible = true;
 
         ChooseType();
+    }
+
+    public void NextCam()
+    {
+        GameManager.Instance.NextCamera();
+    }
+
+    public void PrevCam()
+    {
+        GameManager.Instance.PrevCamera();
+    }
+
+    public void HideCamButton()
+    {
+        mainCanvas.gameObject.SetActive(false);
+        prevCamButton.gameObject.SetActive(false);
+        nextCamButton.gameObject.SetActive(false);
+    }    
+    
+    public void ShowCamButton()
+    {
+        mainCanvas.gameObject.SetActive(true);
+        prevCamButton.gameObject.SetActive(true);
+        nextCamButton.gameObject.SetActive(true);
     }
 }

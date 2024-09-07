@@ -36,35 +36,38 @@ public class Player : NetworkBehaviour
 
     void Update()
     {
-        switch (GetComponent<CheckType>().CurrentType.Value)
+        if (GameManager.Instance.IsAlive)
         {
-            case CheckType.Type.Hunter:
-                if (Input.GetKeyDown(KeyCode.Q))
-                {
-                    Shoot();
-                }
-                break;
-            case CheckType.Type.Morph:
-                if (Input.GetKeyDown(KeyCode.F))
-                {
-                    Morph();
-                }
-                break;
-            default:
-                Debug.Log("Should not happen");
-                break;
-        }
+            switch (GetComponent<CheckType>().CurrentType.Value)
+            {
+                case CheckType.Type.Hunter:
+                    if (Input.GetKeyDown(KeyCode.Q))
+                    {
+                        Shoot();
+                    }
+                    break;
+                case CheckType.Type.Morph:
+                    if (Input.GetKeyDown(KeyCode.F))
+                    {
+                        Morph();
+                    }
+                    break;
+                default:
+                    Debug.Log("Should not happen");
+                    break;
+            }
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Grab();
-        }
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            PlayRandomSound();
-        }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Grab();
+            }
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                PlayRandomSound();
+            }
 
-        HighlightProps();
+            HighlightProps();
+        }
     }
 
     private void Morph()

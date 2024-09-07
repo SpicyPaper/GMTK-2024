@@ -20,6 +20,10 @@ public class GameManager : NetworkBehaviour
 
     public List<Camera> playerCameras = new List<Camera>();
 
+    private int currentCameraIndex = 0;
+
+    public bool IsAlive = true;
+
     void Awake()
     {
         if (Instance == null)
@@ -174,8 +178,37 @@ public class GameManager : NetworkBehaviour
     {
         if (playerCameras.Count > 0)
         {
+            CurrentCamera.enabled = false;
             playerCameras[0].enabled = true;
             CurrentCamera = playerCameras[0];
+            currentCameraIndex = 0;
         }
+    }
+
+    public void ActivePlayerCamera()
+    {
+        CurrentCamera.enabled = false;
+        CurrentCamera = playerCamera;
+        CurrentCamera.enabled = true;
+    }
+
+    public void NextCamera()
+    {
+        currentCameraIndex += 1;
+        if (currentCameraIndex >= playerCameras.Count)
+            currentCameraIndex = 0;
+        CurrentCamera.enabled = false;
+        CurrentCamera = playerCameras[currentCameraIndex];
+        CurrentCamera.enabled = true;
+    }
+
+    public void PrevCamera()
+    {
+        currentCameraIndex -= 1;
+        if (currentCameraIndex < 0)
+            currentCameraIndex = playerCameras.Count -1;
+        CurrentCamera.enabled = false;
+        CurrentCamera = playerCameras[currentCameraIndex];
+        CurrentCamera.enabled = true;
     }
 }
